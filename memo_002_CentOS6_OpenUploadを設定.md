@@ -14,8 +14,10 @@
 - sudo yum -y update
 - sudo yum -y install vim vim-common vim-enhanced tree
 - sudo vim ~/.vimrc
-    - set number
-    - hi Comment ctermfg=gray
+```
+set number
+hi Comment ctermfg=gray
+```
 
 ## スナップショット保存1：基本設定終了
 - Vagrantスナップショット作成
@@ -45,13 +47,15 @@
 - 参考ページ
     - https://www.server-world.info/query?os=CentOS_6&p=httpd&f=1
 - sudo vim /etc/httpd/conf/httpd.conf
-    - 44行目：ServerTokens Prod
-    - 76行目：KeepAlive On
-    - 262行目：ServerAdmin watanabe@kingsoft.jp
-    - 292行目：DocumentRoot "/var/www/openupload"
-    - 338行目：AllowOverride All
-    - 402行目：DirectoryIndex index.html index.htm index.php
-    - 536行目：ServerSignature Off
+```
+44行目：ServerTokens Prod
+76行目：KeepAlive On
+262行目：ServerAdmin watanabe@kingsoft.jp
+292行目：DocumentRoot "/var/www/openupload"
+338行目：AllowOverride All
+402行目：DirectoryIndex index.html index.htm index.php
+536行目：ServerSignature Off
+```
 - sudo /etc/rc.d/init.d/httpd restart
 - sudo chkconfig httpd on 
 
@@ -76,8 +80,10 @@
 ### インストール
 - sudo yum -y install mysql-server
 - sudo vim /etc/my.cnf
-    - character-set-server=utf8
-    - [mysqld]欄の最終行に追記
+```
+character-set-server=utf8
+[mysqld]欄の最終行に追記
+```
 - sudo /etc/rc.d/init.d/mysqld start 
 - sudo chkconfig mysqld on
 
