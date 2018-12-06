@@ -57,7 +57,7 @@ highlight PreProc ctermfg=Magenta
     - vagrant halt
     - vagrant snapshot save savepoint1
     - vagrant snapshot list
-        - 保存されていることを確認
+	- 保存されていることを確認
     - vagrant up
     - vagrant ssh
 
@@ -139,7 +139,7 @@ DocumentRoot "/var/www/wordpress"
     - vagrant halt
     - vagrant snapshot save savepoint3
     - vagrant snapshot list
-        - 保存されていることを確認
+	- 保存されていることを確認
     - vagrant up
     - vagrant ssh
 
