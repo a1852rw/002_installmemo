@@ -20,9 +20,11 @@
     - https://app.vagrantup.com/bento/boxes/centos-7.5
 - vagrant init bento/centos-7.5
 - vagrantfile
-    -   # config.vm.network "public_network"
-    - config.vm.network "forwarded_port", guest: 80, host: 2080   # HTTP
-    - config.vm.network "forwarded_port", guest: 443, host: 20443  # HTTPS
+```
+# config.vm.network "public_network"
+config.vm.network "forwarded_port", guest: 80, host: 2080   # HTTP
+config.vm.network "forwarded_port", guest: 443, host: 20443  # HTTPS
+```
 - vagrant plugin install vagrant-vbguest
 - vagrant up
 - vagrant ssh
