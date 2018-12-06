@@ -15,6 +15,7 @@
 ```bash
 export PS1="\[\e[1;32m\]\u@\h \W\$\[\e[m\]"
 ```
+- ここを変更しないと深めのディレクトリに入った場合にプロンプトで行が埋まる
 
 ## vimの設定を変える
 - sudo ./vimrc に追記する
@@ -25,10 +26,8 @@ hi Comment ctermfg=gray
 
 ## git-hubのための設定
 - ssh-keygen
-- cd ~/.ssh
-- cat id_rsa >> authorized_keys
-- cat id_rsa.pub 表示された公開鍵をgit-hubのsshページに登録する
-- cd ~
+- cat ~/.ssh/id_rsa >> ~/.ssh/authorized_keys
+- cat ~/.ssh/id_rsa.pub 表示された公開鍵をgit-hubのsshページに登録する
 - mkdir ~/001_git-hub
 - cd 001_git-hub
-- git clone git-hub上に作ったリポジトリ
+- git clone git-hub上に作ったリポジトリで取得できるClone用のURL
