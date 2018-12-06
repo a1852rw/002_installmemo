@@ -1,14 +1,15 @@
 # OpenUpload構築メモ(CentOS)
 ## 検証環境
-- 仮想化ツール1：Vagrant
+- 仮想化ツール1：Vagrant 2.1.5
 - 仮想化ツール2：Oracle VirtualBox
-- ゲストOS：Cent OS 6.8
+- ゲストOS：Cent OS 6.8 (bento/centos-6.8)
 - ポートフォワーディング設定
     - vagrantfile
     - config.vm.network "forwarded_port", guest: 80, host: 2080   # HTTP
     - config.vm.network "forwarded_port", guest: 443, host: 20443  # HTTPS
 - ツール1：Apache2
 - ツール2：PHP 5.3.3
+- ツール3：mySQL 14.14
 
 ## 基本設定
 - sudo yum -y update
@@ -16,7 +17,14 @@
 - sudo vim ~/.vimrc
 ```
 set number
-hi Comment ctermfg=gray
+highlight Comment ctermfg=Green 
+highlight Constant ctermfg=Red 
+highlight Identifier ctermfg=Cyan 
+highlight Statement ctermfg=Yellow 
+highlight Title ctermfg=Magenta 
+highlight Special ctermfg=Magenta 
+highlight PreProc ctermfg=Magenta
+
 ```
 
 ## スナップショット保存1：基本設定終了
@@ -129,36 +137,21 @@ character-set-server=utf8
     - 「Save Configuration」ボタンをクリック
     - 「click here to start using your new site」ボタンをクリック (極めて重要)
         - http://localhost:2080/index.php
-    - 設定の最後でアクセスできなくなる
 
-### PHPのバージョン変えてみる　5.6
-- 参考URL
-    - https://qiita.com/ozawan/items/caf6e7ddec7c6b31f01e
-- sudo yum install -y epel-release
-- sudo rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
-- sudo yum install -y --enablerepo=remi,remi-php56 php php-cgi libapache2-mod-php php-common php-pear php-mbstring php-cli php-fpm php-dev php-zip php-pgsql php-mysql 
-- sudo a2enmod php5.6
-- 成功したのでsavepoint4として保存
-    - だがまだファイルのダウンロードまではできない
+## 内容のまとめ
+### Vagrant Box
+- ここまでの手順を行い完成したVagrant Boxをパッケージ化し下記に保存した
+- Box名：pesia_one/001_CentOS-6.8_OpenUpload
+- https://app.vagrantup.com/pesia_one/boxes/001_CentOS-6.8_OpenUpload
 
-### vimの表示改善
-- sudo vim /etc/vimrc
-```vimrc
-set number
-hi Comment ctermfg=gray
-```
+### ブログ記事
+- ここまでの手順を詳しくまとめたブログ記事を作成した
+	- 【OpenUpload】CentOSへのインストール手順(成功)
+	- https://www.pesia-one.com/entry/2018/09/22/070000
 
-## 手順を変更して確認
-- 取り合えず
-    - apache mysql openuplodをインストールして設定
-    - ここで一回 savepoint1-1として保存
-        - PHPのインストールだけしていない
-    - PHPのバージョンを変えて色々やってみる
-
-### PHPのバージョン変えてみる　5.4
-- 参考URL
-    - https://qiita.com/ozawan/items/caf6e7ddec7c6b31f01e
-- sudo yum install -y epel-release
-- sudo rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
-- sudo yum install -y --enablerepo=remi,remi-php52 php php-cgi libapache2-mod-php php-common php-pear php-mbstring php-cli php-fpm php-dev php-zip php-pgsql php-mysql 
-- sudo /etc/rc.d/init.d/httpd restart
+### 注意事項
+- 検証環境ではアクセス先のアドレスが「http://localhost:2080」のようになる
+- しかしファイルのダウンロードリンクは「http://localhost2380」のようになるため、手動で「:」を入力する必要がある
+- PHP7.Xではエラーになりスクリプトが動作しない
+	- CentOS6.8ではPHP5.3.3がインストールされるため問題はない。
+	- Ubuntuなどで使う場合はPHP5.6などを指定する必要がある
