@@ -11,7 +11,7 @@
 ## 検証環境
 - 仮想化ツール1：Vagrant
 - 仮想化ツール2：Oracle VirtualBox
-- ゲストOS：Cent OS 7.5
+- ゲストOS：Cent OS 7.5 (bento/centos-7.5)
     - https://app.vagrantup.com/bento/boxes/centos-7.5
 - ツール1：Apache2
 - ツール2：PHP
@@ -22,10 +22,12 @@
 - ダウンロードサイト
     - https://app.vagrantup.com/bento/boxes/centos-7.5
 - vagrant init bento/centos-7.5
-- vagrantfile
-    -   # config.vm.network "public_network"
-    - config.vm.network "forwarded_port", guest: 80, host: 2680   # HTTP
-    - config.vm.network "forwarded_port", guest: 443, host: 26443  # HTTPS
+- vagrantfileを編集
+```Vagrantfile
+# config.vm.network "public_network"
+config.vm.network "forwarded_port", guest: 80, host: 2680   # HTTP
+config.vm.network "forwarded_port", guest: 443, host: 26443  # HTTPS
+```
 - vagrant plugin install vagrant-vbguest
 - vagrant up
 - vagrant ssh
@@ -68,7 +70,9 @@ highlight PreProc ctermfg=Magenta
     - php -v
 - sudo cp /etc/php.ini /etc/php.ini.org
 - sudo vim /etc/php.ini
-    - date.timezone = "Asia/Tokyo"
+```ini
+date.timezone = "Asia/Tokyo"
+```
 - sudo systemctl start httpd
     - sudo systemctl enable httpd
     - sudo systemctl list-unit-files | grep httpd
@@ -76,8 +80,10 @@ highlight PreProc ctermfg=Magenta
 ## MariaDBインストール
 - sudo yum install -y mariadb-server mariadb-client
 - sudo vim /etc/my.cnf
-    - [mysqld] セクション内に追記
-    - character-set-server=utf8
+```conf
+[mysqld] セクション内に追記
+character-set-server=utf8
+```
 - sudo systemctl start mariadb
 - sudo systemctl enable mariadb
 
@@ -116,10 +122,12 @@ highlight PreProc ctermfg=Magenta
 - sudo chown -R apache:apache *
 - sudo cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.org 
 - sudo vim /etc/httpd/conf/httpd.conf
-    - DocumentRoot "/var/www/wordpress"
-    - <Directory "/var/www/wordpress">
-    - AllowOverride All
-    - </Directory>
+```conf
+DocumentRoot "/var/www/wordpress"
+<Directory "/var/www/wordpress">
+	AllowOverride All
+</Directory>
+```
 - sudo systemctl stop httpd
 - sudo systemctl start httpd
 - ブラウザでアクセス
@@ -166,5 +174,4 @@ highlight PreProc ctermfg=Magenta
     - https://github.com/pressbooks/pressbooks
 - githubからzipをダウンロードして読み込んだ
     - エラー発生で失敗
-- 
-
+- 手順を確認中
