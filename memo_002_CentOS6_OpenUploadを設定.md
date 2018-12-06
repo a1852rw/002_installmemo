@@ -138,7 +138,20 @@ character-set-server=utf8
     - 「click here to start using your new site」ボタンをクリック (極めて重要)
         - http://localhost:2080/index.php
 
-## Vagrant Box
+## 内容のまとめ
+### Vagrant Box
 - ここまでの手順を行い完成したVagrant Boxをパッケージ化し下記に保存した
 - Box名：pesia_one/001_CentOS-6.8_OpenUpload
 - https://app.vagrantup.com/pesia_one/boxes/001_CentOS-6.8_OpenUpload
+
+### ブログ記事
+- ここまでの手順を詳しくまとめたブログ記事を作成した
+	- 【OpenUpload】CentOSへのインストール手順(成功)
+	- https://www.pesia-one.com/entry/2018/09/22/070000
+
+### 注意事項
+- 検証環境ではアクセス先のアドレスが「http://localhost:2080」のようになる
+- しかしファイルのダウンロードリンクは「http://localhost2380」のようになるため、手動で「:」を入力する必要がある
+- PHP7.Xではエラーになりスクリプトが動作しない
+	- CentOS6.8ではPHP5.3.3がインストールされるため問題はない。
+	- Ubuntuなどで使う場合はPHP5.6などを指定する必要がある
