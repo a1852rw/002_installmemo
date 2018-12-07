@@ -6,20 +6,20 @@
 	- そういった構成をとる場合は他の資料を参照することをお勧めする
 
 ## 検証環境
-- 仮想化ツール1：Vagrant
-- 仮想化ツール2：Oracle VirtualBox
-- ゲストOS：Cent OS 7.5 (bento/centos-7.5)
+- 仮想化ツール1：Vagrant 2.1.2
+- 仮想化ツール2：Oracle VirtualBox 5.2.22
+- ゲストOS：Cent OS 7.5 (bento/centos-7.5 v201811.25.0)
     - https://app.vagrantup.com/bento/boxes/centos-7.5
-- ツール1：Apache2
-- ツール2：PHP
-- ツール3：MariaDB 
-- ツール2：WordPress
+- ツール1：Apache 2.4.6
+- ツール2：PHP 5.4.16
+- ツール3：MariaDB 15.1 
+- ツール2：WordPress 5.0
 
 ## boxのインストールと設定
 - ダウンロードサイト
     - https://app.vagrantup.com/bento/boxes/centos-7.5
 - vagrant init bento/centos-7.5
-- vagrantfile
+- Vagrantfile を編集(メモ帳などで直接書き換える)
 ```
 # config.vm.network "public_network"
 config.vm.network "forwarded_port", guest: 80, host: 2080   # HTTP
@@ -40,6 +40,10 @@ config.vm.network "forwarded_port", guest: 443, host: 20443  # HTTPS
         - https://ymyk.wordpress.com/2010/06/25/vim%E3%81%AE%E8%89%B2%E8%A8%AD%E5%AE%9A/
 ```
 set number
+set title
+syntax on
+set smartindent
+
 highlight Comment ctermfg=Green 
 highlight Constant ctermfg=Red 
 highlight Identifier ctermfg=Cyan 
@@ -47,6 +51,9 @@ highlight Statement ctermfg=Yellow
 highlight Title ctermfg=Magenta 
 highlight Special ctermfg=Magenta 
 highlight PreProc ctermfg=Magenta
+
+set tabstop=2
+set shiftwidth=2
 ```
 - sudo timedatectl set-timezone Asia/Tokyo
     - timedatectl status
@@ -68,6 +75,7 @@ HISTFILESIZE=2000
 ## PHPインストール(Apache付属)
 - sudo yum -y install php php-mysql
     - php -v
+		- httpd -v
 - sudo cp /etc/php.ini /etc/php.ini.org
 - sudo vim /etc/php.ini
 ```ini
@@ -79,6 +87,8 @@ date.timezone = "Asia/Tokyo"
 
 ## MariaDBインストール
 - sudo yum install -y mariadb-server mariadb-client
+	- mysql --version
+	- mariadbのバージョンが表示されれば成功
 - sudo vim /etc/my.cnf
 ```cnf
 [mysqld] セクション内に追記
@@ -99,6 +109,7 @@ character-set-server=utf8
 
 ## MariaDB WordPree用設定
 - mysql -u root -p
+		- Enter Password: wordpress_2018
     - MariaDB> create user wordpress identified by 'wordpresspasswd';
     - MariaDB> create database wordpress;
     - MariaDB> grant all privileges on wordpress.* TO 'wordpress';
@@ -119,8 +130,7 @@ DocumentRoot "/var/www/wordpress"
     AllowOverride All
 </Directory>
 ```
-- sudo systemctl stop httpd
-- sudo systemctl start httpd
+- sudo systemctl restart httpd
 - ブラウザでアクセス
     - http://localhost:2080/wp-admin/install.php
     - ブラウザ上で設定する
@@ -135,9 +145,10 @@ DocumentRoot "/var/www/wordpress"
     - データベースのホスト名：localhost
 - ブログの設定
     - タイトル：wordpress the world ブログ(仮)
-    - 管理者ユーザ名：wordpress_admin
+    - 管理者ユーザ名：wordpress_2018
     - パスワード：wordpress_2018
-    - メールアドレス：test@test
+    - メールアドレス：test@test.jp
+		- 検索エンジンがこのサイトをインデックスしないようにする：有効
 
 ## 追加：Digest認証の導入
 - ここまでの手順ではWordPressのセキュリティ設定が皆無である。そのため(余裕があれば)ログイン画面にダイジェスト認証を導入する
