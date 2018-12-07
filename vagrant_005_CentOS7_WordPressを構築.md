@@ -17,7 +17,7 @@
 
 ## boxのインストールと設定
 - ダウンロードサイト
-    - https://app.vagrantup.com/bento/boxes/centos-7.5
+	- https://app.vagrantup.com/bento/boxes/centos-7.5
 - vagrant init bento/centos-7.5
 - Vagrantfile を編集(メモ帳などで直接書き換える)
 ```
@@ -31,13 +31,13 @@ config.vm.network "forwarded_port", guest: 443, host: 20443  # HTTPS
 
 ## 初期設定
 - sudo yum -y update
-    - uname -a
-    - cat /etc/redhat-release
-    - 更新後のOSバージョンを確認
+	- uname -a
+	- cat /etc/redhat-release
+	- 更新後のOSバージョンを確認
 - sudo yum -y install vim vim-common vim-enhanced tree
 - sudo vim /etc/vimrc
-    - 参考サイト
-        - https://ymyk.wordpress.com/2010/06/25/vim%E3%81%AE%E8%89%B2%E8%A8%AD%E5%AE%9A/
+	- 参考サイト
+	- https://ymyk.wordpress.com/2010/06/25/vim%E3%81%AE%E8%89%B2%E8%A8%AD%E5%AE%9A/
 ```
 set number
 set title
@@ -69,13 +69,13 @@ HISTFILESIZE=2000
     - 日本語で表示されることを確認する
 
 # 参考ページ
-    - WordPressをインストールする（CentOS7.4）
-    - https://qiita.com/kaikusakari/items/f3358855e0d21a1f4e99
+- WordPressをインストールする（CentOS7.4）
+- https://qiita.com/kaikusakari/items/f3358855e0d21a1f4e99
 
 ## PHPインストール(Apache付属)
 - sudo yum -y install php php-mysql
-    - php -v
-		- httpd -v
+	- php -v
+	- httpd -v
 - sudo cp /etc/php.ini /etc/php.ini.org
 - sudo vim /etc/php.ini
 ```ini
@@ -144,17 +144,17 @@ DocumentRoot "/var/www/wordpress"
     - パスワード：wordpresspasswd
     - データベースのホスト名：localhost
 - ブログの設定
-    - タイトル：wordpress the world ブログ(仮)
-    - 管理者ユーザ名：wordpress_2018
-    - パスワード：wordpress_2018
-    - メールアドレス：test@test.jp
-		- 検索エンジンがこのサイトをインデックスしないようにする：有効
+	- タイトル：wordpress the world ブログ(仮)
+	- 管理者ユーザ名：wordpress_2018
+	- パスワード：wordpress_2018
+	- メールアドレス：test@test.jp
+	- 検索エンジンがこのサイトをインデックスしないようにする：有効
 
 ## 追加：Digest認証の導入
 - ここまでの手順ではWordPressのセキュリティ設定が皆無である。そのため(余裕があれば)ログイン画面にダイジェスト認証を導入する
 - sudo htdigest -c /etc/httpd/conf/htdigest wordpress wps_admin
-    - Mew Password:wps_2018
-    - re-type New Password:wps_2018
+	- Mew Password:wps_2018
+	- re-type New Password:wps_2018
 - sudo vim /etc/httpd/conf/httpd.conf
 ```
 DocumentRoot "/var/www/wordpress"内の129行目あたりに下記を追記する
