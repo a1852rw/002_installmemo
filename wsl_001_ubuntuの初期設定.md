@@ -23,6 +23,9 @@ export PS1="\[\e[1;32m\]\u@\h \W\$\[\e[m\]"
 - sudo ~/.vimrc
 ```vimrc
 set number
+set title
+syntax on
+set smartindent
 
 highlight Comment ctermfg=Green
 highlight Constant ctermfg=Red
