@@ -51,7 +51,7 @@ set shiftwidth=2
 - vagrant halt
 - vagrant snapshot save savepoint1
 - vagrant snapshot list
-- vagrant u
+- vagrant up
 
 ## インストール作業
 ### 参考ページ
@@ -61,6 +61,8 @@ set shiftwidth=2
   - http://blog.redmine.jp/articles/3_4/install/centos/
 - CentOS7 Redmineのインストール
 	- https://www.unix-power.net/networking/post-728
+- Ruby 2.5 インストール
+	- https://www.server-world.info/query?os=CentOS_7&p=ruby25
 
 
 ### 必要なツールのインストール
