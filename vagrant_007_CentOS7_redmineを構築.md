@@ -25,7 +25,7 @@ config.vm.network "forwarded_port", guest: 443, host: 20443  # HTTPS
 - uname -a
 - cat /etc/redhat-release
     - 更新後のOSバージョンを確認
-- sudo yum -y install vim tree git
+- sudo yum install -y vim tree git
 - sudo vim /etc/vimrc
 ```text
 set number
@@ -43,9 +43,10 @@ highlight PreProc ctermfg=Magenta
 
 set tabstop=2
 set shiftwidth=2
-sudo timedatectl set-timezone Asia/Tokyo
-timedatectl status
 ```
+- sudo timedatectl set-timezone Asia/Tokyo
+- timedatectl status
+
 ### スナップショット1
 - vagrant halt
 - vagrant snapshot save savepoint1
@@ -66,17 +67,22 @@ timedatectl status
 - sudo yum install -y httpd httpd-devel
 - sudo yum install -y ImageMagick ImageMagick-devel ipa-pgothic-fonts 
 
-### Ruvyのインストール
-- sudo wget https://cache.ruby-lang.org/pub/ruby/2.4/ruby-2.4.1.tar.gz
-- sudo tar xvf ruby-2.4.1.tar.gz
-- cd ruby-2.4.1
-- sudo ./configure --disable-install-doc
-- sudo make
-- sudo make install
-- cd ~
+### Rubyのインストール
+- sudo yum install -y yum-plugin-priorities
+- sudo sed -i -e "s/\]$/\]\npriority=1/g" /etc/yum.repos.d/CentOS-Base.repo
+- sudo yum install -y centos-release-scl-rh centos-release-scl
+- sudo yum --enablerepo=centos-sclo-rh -y install rh-ruby24
+- sudo scl enable rh-ruby24 bash
 - ruby -v
     - バージョン表示でインストールを確認
-		- gem install bundler --no-rdoc --no-ri
+- sudo vim /etc/profile.d/rh-ruby24.sh
+```sh
+#!/bin/bash
+
+source /opt/rh/rh-ruby24/enable
+export X_SCLS="`scl enable rh-ruby24 'echo $X_SCLS'`"
+```
+- gem install bundler --no-rdoc --no-ri
 
 ### Postgre SQLの設定
 - sudo postgresql-setup initdb
