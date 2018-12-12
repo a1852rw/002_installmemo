@@ -51,14 +51,17 @@ set shiftwidth=2
 - vagrant halt
 - vagrant snapshot save savepoint1
 - vagrant snapshot list
-- vagrant up
+- vagrant u
 
 ## インストール作業
 ### 参考ページ
 - Redmineのインストール
-    - http://guide.redmine.jp/RedmineInstall/
+  - http://guide.redmine.jp/RedmineInstall/
 - Redmine 3.4をCentOS 7.3にインストールする手順
-    - http://blog.redmine.jp/articles/3_4/install/centos/
+  - http://blog.redmine.jp/articles/3_4/install/centos/
+- CentOS7 Redmineのインストール
+	- https://www.unix-power.net/networking/post-728
+
 
 ### 必要なツールのインストール
 - sudo yum groupinstall -y "Development Tools"
@@ -84,6 +87,12 @@ export X_SCLS="`scl enable rh-ruby24 'echo $X_SCLS'`"
 ```
 - gem install bundler --no-rdoc --no-ri
 
+### スナップショット2
+- vagrant halt
+- vagrant snapshot save savepoint2
+- vagrant snapshot list
+- vagrant list
+
 ### Postgre SQLの設定
 - sudo postgresql-setup initdb
 - sudo vim  /var/lib/pgsql/data/pg_hba.conf
@@ -99,8 +108,9 @@ host    redmine         redmine         127.0.0.1/32            md5
 host    redmine         redmine         ::1/128                 md5
 ```
 - sudo systemctl start postgresql.service
-- systemctl enable postgresql.service
+- sudo systemctl enable postgresql.service
 - cd /var/lib/pgsql
+	- ここはsudoで実行しても移動できなかった検証時は「/var/lib」で操作した
 - sudo -u postgres createuser -P redmine
     - Pass Word：redmine_2018
 		- これによりユーザー「redmine」とパスワード「redmine_2018」が設定される
@@ -108,7 +118,7 @@ host    redmine         redmine         ::1/128                 md5
 - cd ~
 
 ### Redmineのインストール
-- svn co https://svn.redmine.org/redmine/branches/3.4-stable /var/lib/redmine
+- sudo svn co https://svn.redmine.org/redmine/branches/3.4-stable /var/lib/redmine
     - インストール先のディレクトリは任意に指定が可能
 - sudo vim /var/lib/redmine/config/database.yml
 ```yml
