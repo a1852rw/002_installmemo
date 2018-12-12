@@ -25,7 +25,7 @@ config.vm.network "forwarded_port", guest: 443, host: 20443  # HTTPS
 - uname -a
 - cat /etc/redhat-release
     - 更新後のOSバージョンを確認
-- sudo yum -y install vim tree git
+- sudo yum install -y vim tree git
 - sudo vim /etc/vimrc
 ```text
 set number
@@ -43,9 +43,10 @@ highlight PreProc ctermfg=Magenta
 
 set tabstop=2
 set shiftwidth=2
-sudo timedatectl set-timezone Asia/Tokyo
-timedatectl status
 ```
+- sudo timedatectl set-timezone Asia/Tokyo
+- timedatectl status
+
 ### スナップショット1
 - vagrant halt
 - vagrant snapshot save savepoint1
@@ -55,9 +56,14 @@ timedatectl status
 ## インストール作業
 ### 参考ページ
 - Redmineのインストール
-    - http://guide.redmine.jp/RedmineInstall/
+  - http://guide.redmine.jp/RedmineInstall/
 - Redmine 3.4をCentOS 7.3にインストールする手順
-    - http://blog.redmine.jp/articles/3_4/install/centos/
+  - http://blog.redmine.jp/articles/3_4/install/centos/
+- CentOS7 Redmineのインストール
+	- https://www.unix-power.net/networking/post-728
+- Ruby 2.5 インストール
+	- https://www.server-world.info/query?os=CentOS_7&p=ruby25
+
 
 ### 必要なツールのインストール
 - sudo yum groupinstall -y "Development Tools"
@@ -66,17 +72,28 @@ timedatectl status
 - sudo yum install -y httpd httpd-devel
 - sudo yum install -y ImageMagick ImageMagick-devel ipa-pgothic-fonts 
 
-### Ruvyのインストール
-- sudo wget https://cache.ruby-lang.org/pub/ruby/2.4/ruby-2.4.1.tar.gz
-- sudo tar xvf ruby-2.4.1.tar.gz
-- cd ruby-2.4.1
-- sudo ./configure --disable-install-doc
-- sudo make
-- sudo make install
-- cd ~
+### Rubyのインストール
+- sudo yum install -y yum-plugin-priorities
+- sudo sed -i -e "s/\]$/\]\npriority=1/g" /etc/yum.repos.d/CentOS-Base.repo
+- sudo yum install -y centos-release-scl-rh centos-release-scl
+- sudo yum --enablerepo=centos-sclo-rh -y install rh-ruby24
+- sudo scl enable rh-ruby24 bash
 - ruby -v
     - バージョン表示でインストールを確認
-		- gem install bundler --no-rdoc --no-ri
+- sudo vim /etc/profile.d/rh-ruby24.sh
+```sh
+#!/bin/bash
+
+source /opt/rh/rh-ruby24/enable
+export X_SCLS="`scl enable rh-ruby24 'echo $X_SCLS'`"
+```
+- gem install bundler --no-rdoc --no-ri
+
+### スナップショット2
+- vagrant halt
+- vagrant snapshot save savepoint2
+- vagrant snapshot list
+- vagrant list
 
 ### Postgre SQLの設定
 - sudo postgresql-setup initdb
@@ -93,8 +110,9 @@ host    redmine         redmine         127.0.0.1/32            md5
 host    redmine         redmine         ::1/128                 md5
 ```
 - sudo systemctl start postgresql.service
-- systemctl enable postgresql.service
+- sudo systemctl enable postgresql.service
 - cd /var/lib/pgsql
+	- ここはsudoで実行しても移動できなかった検証時は「/var/lib」で操作した
 - sudo -u postgres createuser -P redmine
     - Pass Word：redmine_2018
 		- これによりユーザー「redmine」とパスワード「redmine_2018」が設定される
@@ -102,7 +120,7 @@ host    redmine         redmine         ::1/128                 md5
 - cd ~
 
 ### Redmineのインストール
-- svn co https://svn.redmine.org/redmine/branches/3.4-stable /var/lib/redmine
+- sudo svn co https://svn.redmine.org/redmine/branches/3.4-stable /var/lib/redmine
     - インストール先のディレクトリは任意に指定が可能
 - sudo vim /var/lib/redmine/config/database.yml
 ```yml
