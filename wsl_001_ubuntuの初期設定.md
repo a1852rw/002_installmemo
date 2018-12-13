@@ -2,7 +2,7 @@
 - WSLでUbuntuをインストールした時に最初に行う設定の手順をまとめた
 
 ## 全部アップデート
-- sudo apt-get update
+- sudo apt-get update && apt-ger upgrade -y
 
 ## ツールをインストール
 - sudo apt-get install tree
