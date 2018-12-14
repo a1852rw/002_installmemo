@@ -63,7 +63,8 @@ set shiftwidth=2
 	- https://www.unix-power.net/networking/post-728
 - Ruby 2.5 インストール
 	- https://www.server-world.info/query?os=CentOS_7&p=ruby25
-
+- bundleコマンドのパスを通す方法
+	- https://qiita.com/shyamahira/items/6c986eb3e21471b35af2
 
 ### 必要なツールのインストール
 - sudo yum groupinstall -y "Development Tools"
