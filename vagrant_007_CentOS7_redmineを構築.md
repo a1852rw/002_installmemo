@@ -69,7 +69,7 @@ set shiftwidth=2
 ### 必要なツールのインストール
 - sudo yum groupinstall -y "Development Tools"
 - sudo yum install -y openssl-devel readline-devel zlib-devel curl-devel libyaml-devel libffi-devel
-- sudo yum install -y postgresql-server postgresql-devel
+- sudo yum install -y mariadb-server mariadb-devel mariadb
 - sudo yum install -y httpd httpd-devel
 - sudo yum install -y ImageMagick ImageMagick-devel ipa-pgothic-fonts 
 
@@ -77,7 +77,7 @@ set shiftwidth=2
 - sudo yum install -y yum-plugin-priorities
 - sudo sed -i -e "s/\]$/\]\npriority=1/g" /etc/yum.repos.d/CentOS-Base.repo
 - sudo yum install -y centos-release-scl-rh centos-release-scl
-- sudo yum --enablerepo=centos-sclo-rh -y install rh-ruby24
+- sudo yum --enablerepo=centos-sclo-rh -y install rh-ruby24 rh-ruby24-ruby-devel
 - sudo scl enable rh-ruby24 bash
 - ruby -v
     - バージョン表示でインストールを確認
@@ -96,33 +96,29 @@ export X_SCLS="`scl enable rh-ruby24 'echo $X_SCLS'`"
 - vagrant snapshot list
 - vagrant list
 
-### Postgre SQLの設定
-- sudo postgresql-setup initdb
-- sudo vim  /var/lib/pgsql/data/pg_hba.conf
-```conf
-# Put your actual configuration here
-# ----------------------------------
-#
-# If you want to allow non-local connections, you need to add more
-# "host" records.  In that case you will also need to make PostgreSQL
-# listen on a non-local interface via the listen_addresses
-# configuration parameter, or via the -i or -h command line switches.
-host    redmine         redmine         127.0.0.1/32            md5
-host    redmine         redmine         ::1/128                 md5
+### MariaDBの設定
+- sudo vim /etc/my.conf
 ```
-- sudo systemctl start postgresql.service
-- sudo systemctl enable postgresql.service
-- cd /var/lib/pgsql
-	- ここはsudoで実行しても移動できなかった検証時は「/var/lib」で操作した
-- sudo -u postgres createuser -P redmine
-    - Pass Word：redmine_2018
-		- これによりユーザー「redmine」とパスワード「redmine_2018」が設定される
-- sudo -u postgres createdb -E UTF-8 -l ja_JP.UTF-8 -O redmine -T template0 redmine
-- cd ~
+[mysqld]のセクションに下記を追記
+character-set-server=utf8
+
+```
+- sudo systemctl enable mariadb.service
+- sudo systemctl start mariadb.service
+- mysql_secure_installation
+	- パスワードを「redmine_2018」に設定、それ以外はすべて「y」(yesの意味)で設定
+- mysql -u root -p
+	- Password: redmine_2018
+	- create database redmine default character set utf8;
+	- grant all on redmine.* to redmine@localhost identified by 'redmine_passwd';
+	- exit;
 
 ### Redmineのインストール
-- sudo svn co https://svn.redmine.org/redmine/branches/3.4-stable /var/lib/redmine
-    - インストール先のディレクトリは任意に指定が可能
+- sudo wget http://www.redmine.org/releases/redmine-4.0.0.tar.gz
+	- ファイル名はバージョン番号によって変わる。最新版は下記URLから取得。
+	- http://www.redmine.org/projects/redmine/wiki/Download
+- tar zxvf redmine-4.0.0.tar.gz
+- sudo mv redmine-4.0.0 /var/lib/redmine.
 - sudo vim /var/lib/redmine/config/database.yml
 ```yml
 production:
