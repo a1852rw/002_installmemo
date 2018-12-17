@@ -154,7 +154,7 @@ rmagick_font_path: /usr/share/fonts/ipa-pgothic/ipagp.ttf
 - passenger-install-apache2-module --auto --languages ruby
 - passenger-install-apache2-module --snippet
 
-### Apache初期設定
+### Apache初期設定：ここで詰まっていると思われる(Rubyアプリケーションが起動しない)
 - sudo vim /etc/httpd/conf.d/redmine.conf
 ```conf
 # Redmineの画像ファイル・CSSファイル等へのアクセスを許可する設定。
