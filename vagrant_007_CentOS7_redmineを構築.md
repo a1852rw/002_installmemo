@@ -7,9 +7,9 @@
 - ゲストOS：Cent OS 7.5 (bento/centos-7.5 v201811.25.0)
     - https://app.vagrantup.com/bento/boxes/centos-7.5
 		- ツール1：Apache 2.4.6
-		- ツール2：MySQL
-		- ツール3：Redmine 3.4
-		- ツール：Rails 4.2
+		- ツール2：MariaDV 5.5.60
+		- ツール3：Redmine 4.0.0
+		- ツール：Rails 5.2.2
 
 ### Vagrantの初期設定
 - vagrant init bento/centos-7.5
