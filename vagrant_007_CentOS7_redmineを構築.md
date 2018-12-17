@@ -161,28 +161,17 @@ rmagick_font_path: /usr/share/fonts/ipa-pgothic/ipagp.ttf
 # Apache 2.4のデフォルトではサーバ上の全ファイルへのアクセスが禁止されている。
 <Directory "/var/lib/redmine/public">
   Require all granted
-	</Directory>
+</Directory>
 
 # Passengerの基本設定。
 # passenger-install-apache2-module --snippet で表示された設定を記述。
-# 環境によって設定値が異なるため以下の5行はそのまま転記せず、必ず
-# passenger-install-apache2-module --snippet で表示されたものを使用すること。
-#
+# 環境によって設定値が異なるため以下の5行はそのまま転記せず、必ず passenger-install-apache2-module --snippet で表示されたものを使用すること。
 LoadModule passenger_module /usr/local/lib/ruby/gems/2.4.0/gems/passenger-5.1.5/buildout/apache2/mod_passenger.so
 <IfModule mod_passenger.c>
   PassengerRoot /usr/local/lib/ruby/gems/2.4.0/gems/passenger-5.1.5
 	PassengerDefaultRuby /usr/local/bin/ruby
 </IfModule>
 
-# 必要に応じてPassengerのチューニングのための設定を追加（任意）。
-# 詳しくはPhusion Passenger users guide(https://www.phusionpassenger.com/library/config/apache/reference/)参照。
-PassengerMaxPoolSize 20
-PassengerMaxInstancesPerApp 4
-PassengerPoolIdleTime 864000
-PassengerStatThrottleRate 10
-
-Header always unset "X-Powered-By"
-Header always unset "X-Runtime"
 ```
 - sudo systemctl start httpd.service
 - sudo systemctl enable httpd.service
