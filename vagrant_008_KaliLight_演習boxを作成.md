@@ -9,6 +9,10 @@ li Linux Boxイメージの作成
 	- https://qiita.com/KisaragiZin/items/64b664c8b20ea39a6cd1
 - Ubuntu 16.04のVagrantで使うboxを作成する
 	- http://yakubouzu.hatenablog.com/entry/2016/12/17/182737
+- SSHで接続するとキーボードの挙動が変になる
+	- https://forums.ubuntulinux.jp/viewtopic.php?id=5621
+- arch wiki:LightDM
+	- https://wiki.archlinux.jp/index.php/LightDM
 
 ## Kali linux設定
 ### Virtualbox操作
@@ -148,3 +152,21 @@ autologin-user=vagrant
 ```
 - sudo groupadd -r autologin
 - sudo gpasswd -a vagrant autologin
+	- これで自動ログインを設定完了
+- sudo ln -sf /bin/bash /bin/sh
+	- その後システムを再起動した
+	- これでキーボードの挙動がおかしい問題を解決
+- sudo apt-get install -y  virtualbox-guest-dkms
+	- これでゲストOS側の準備も完了となる
+- VirtualBox画面で操作し「Insert Guest Additions CD image」を行う
+	- sudo sh /media/cdrom/VBoxLinuxAdditions.run
+	- 自動的にマウントが行われるのでこのコマンドを実行してシステムを再起動するのみで手順は完了する
+	- 再起動後にVirtualBox画面でこのCD-ROMイメージを取り出す
+	- デスクトップ上のCDアイコンを右クリックして「EjectImage」でマウントを解除できる
+	- ここはできなかったがそれ以外は解決。
+		 - ファイル共有については後日検討する
+
+## スナップショットを作成：3
+- shapshot save savepoint3
+- vagrant snapshot list
+- savepoint3が保存されたことを確認する
