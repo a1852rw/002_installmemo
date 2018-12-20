@@ -3,6 +3,8 @@
 
 ## 全部アップデート
 - sudo apt-get update && apt-ger upgrade -y
+- cat /etc/os-release
+	- 更新後のバージョン番号を確認する
 
 ## ツールをインストール
 - sudo apt-get install tree
