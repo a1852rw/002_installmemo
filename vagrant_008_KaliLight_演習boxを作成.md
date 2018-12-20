@@ -117,3 +117,34 @@ end
 - vagrant shapshot save savepoint1
 - vagrant snapshot list
     - savepoint1が保存されたことを確認する
+
+### 追加でVimの設定も変更
+- /etc/vim/vimrc に追記する
+- sudo vim /etc/vim/vimrc
+```vimrc
+set number
+set title
+syntax on
+set smartindent
+
+highlight Comment ctermfg=Green
+highlight Constant ctermfg=Red
+highlight Identifier ctermfg=Cyan
+highlight Statement ctermfg=Yellow
+highlight Title ctermfg=Magenta
+highlight Special ctermfg=Magenta
+highlight PreProc ctermfg=Magenta
+
+set tabstop=2
+set shiftwidth=2
+```
+
+### 対処2：後半
+- sudo vim /etc/lightdm/lightdm.conf
+	- 該当部分を下記のように書き換える(コメントアウトの解除とログインするユーザーの指定)
+```conf
+[Seat:*]
+autologin-user=vagrant
+```
+- sudo groupadd -r autologin
+- sudo gpasswd -a vagrant autologin
