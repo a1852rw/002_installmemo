@@ -170,3 +170,11 @@ autologin-user=vagrant
 - shapshot save savepoint3
 - vagrant snapshot list
 - savepoint3が保存されたことを確認する
+
+## 追加で設定
+### Wineをインストール
+-  sudo apt-get -y install wine
+
+### 日本語をインストール
+- sudo apt-get install -y aptitude
+- sudo aptitude install fonts-takao-gothic 
