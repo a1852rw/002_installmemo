@@ -178,3 +178,28 @@ autologin-user=vagrant
 ### 日本語をインストール
 - sudo apt-get install -y aptitude
 - sudo aptitude install fonts-takao-gothic 
+
+### NTPを設定/タイムゾーンを設定
+- sudo dpkg -l | grep ntp
+	- NTPがインストールされているかどうかの確認
+- sudo apt-get install -y ntp
+- sudo /etc/init.d/ntp restart
+	- 再起動
+- sudo ntpq -p
+	- 動作確認
+- timedatectl
+	- タイムゾーンの確認
+- timedatectl list-timezones
+	- 設定可能なタイムゾーンを確認する
+- sudo timedatectl set-timezone Asia/Tokyo
+
+--- ここまで実行、以下検証中 ---
+
+### zipファイル解凍ツールをインストール
+- sudo apt-get install -y unzip
+
+
+### volatirity インストール
+- sudo apt-get install -y python python-pip unzip subversion pcregrep libpcre++-dev python-dev
+- sudo apt-get install -y volatility
+- sudo pip install pycrypto
