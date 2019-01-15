@@ -195,9 +195,12 @@ autologin-user=vagrant
 
 --- ここまで実行、以下検証中 ---
 
+### プロンプトの表示を変更
+- sudo vim ~/.bashrc
+- export PS1="\[\e[1;32m\]\u@\h \W\$\[\e[m\]"
+
 ### zipファイル解凍ツールをインストール
 - sudo apt-get install -y unzip
-
 
 ### volatirity インストール
 - sudo apt-get install -y python python-pip unzip subversion pcregrep libpcre++-dev python-dev
