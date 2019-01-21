@@ -173,7 +173,9 @@ autologin-user=vagrant
 
 ## 追加で設定
 ### Wineをインストール
--  sudo apt-get -y install wine
+- sudo dpkg --add-architecture i386
+- sudo apt-get update
+- sudo apt-get install -y wine
 
 ### 日本語をインストール
 - sudo apt-get install -y aptitude
