@@ -22,7 +22,7 @@ export PS1="\[\e[1;32m\]\u@\h \W\$\[\e[m\] "
 
 ## vimの設定を変える
 - .vimrc に追記する(ファイルは新規作成になる)
-- sudo ~/.vimrc
+- sudo vim ~/.vimrc
 ```vimrc
 set number
 set title
