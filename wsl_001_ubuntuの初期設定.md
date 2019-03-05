@@ -16,7 +16,7 @@
 - .bashrc に追記する
 - sudo vim ~/.bashrc
 ```bash
-export PS1="\[\e[1;32m\]\u@\h \W\$\[\e[m\]"
+export PS1="\[\e[1;32m\]\u@\h \W\$\[\e[m\] "
 ```
 - ここを変更しないと深めのディレクトリに入った場合にプロンプトで行が埋まる
 
