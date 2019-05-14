@@ -87,12 +87,12 @@ timedatectl status
 ### WebGoatのインストール
 - sudo mkdir ~/WebGoat-workspace
 - cd ~/WebGoat-workspace/
-- sudo wget https://github.com/WebGoat/WebGoat/releases/download/v8.0.0.M24/webgoat-server-8.0.0.M24.jar
+- sudo wget https://github.com/WebGoat/WebGoat/releases/download/v8.0.0.M25/webgoat-server-8.0.0.M25.jar
     - git-hubからバージョン8.0.0.M24をダウンロードして保存した
     - https://github.com/WebGoat/WebGoat/releases/
 
 ### WebGoatの実行
-- sudo java -jar webgoat-server-8.0.0.M24.jar
+- sudo java -jar webgoat-server-8.0.0.M25.jar
 
 ### ブラウザで操作
 - ブラウザを開き下記にアクセス。ページが表示されることを確認する。
@@ -101,9 +101,9 @@ timedatectl status
 ## 備考
 - よく見たらGithub上にVagrantでWebGoat環境を作るスクリプトが置かれていた
     - https://github.com/WebGoat/WebGoat/blob/develop/webgoat-images/vagrant-training/Vagrantfile
-- このファイルを保存してvagrant up すれば今回まとめた手順は不要
+- このファイルを保存してvagrant up すれば今回まとめた手順は不要(ただしバージョンM21と古い)
 
 
 <!---
-java -jar webgoat-server-8.0.0.M24.jar --server.address=0.0.0.0
+java -jar webgoat-server-8.0.0.M25.jar --server.address=0.0.0.0
 --->
