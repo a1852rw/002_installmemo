@@ -109,7 +109,7 @@ character-set-server=utf8
 
 ## MariaDB WordPree用設定
 - mysql -u root -p
-		- Enter Password: wordpress_2018
+    - Enter Password: wordpress_2018
     - MariaDB> create user wordpress identified by 'wordpresspasswd';
     - MariaDB> create database wordpress;
     - MariaDB> grant all privileges on wordpress.* TO 'wordpress';
