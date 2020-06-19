@@ -79,7 +79,20 @@ set smartindent
     - password: ec-cube
 - mysql -uroot -p
     - create database eccube;
-    - grant all privileges on eccube.* to ec-cube@localhost IDENTIFIED BY 'ec-cube';
+    - grant all privileges on eccube.* to eccube@localhost IDENTIFIED BY 'ec-cube';
+    - exit
+- mysql -u eccube -p
+    - password：ec-cube
+    - show databases;
+    - テーブル「ec-cube」が表示されれば成功
+- exit
+
+### ここで保存
+- exit
+- vagrant snapshot save savepoint_004 --force
+- vagrant snapshot list
+
+### EC-Cubeのインストール
 
 ## 参考ページ
 - Server World 初期設定 : リポジトリを追加する2019
