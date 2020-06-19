@@ -131,4 +131,5 @@ AllowOverride All
     - https://sys-guard.com/post-6825/
 - 【初心者向け】EC-CUBE のインストール方法、失敗しない手順を図で解説します
     - https://www.yamatofinancial.jp/learning/pre-opening/how-to-install-ec-cube.html
-- 
+- さくらVPS(CentOS 7)にEC-CUBE 3.0をインストールする
+    - https://risa-webstore.com/blog/?p=71
