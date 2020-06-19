@@ -93,6 +93,30 @@ set smartindent
 - vagrant snapshot list
 
 ### EC-Cubeのインストール
+- sudo wget http://downloads.ec-cube.net/src/eccube-4.0.4.zip
+- sudo unzip eccube-4.0.4.zip
+- sudo mv ~/eccube-4.0.4/* /var/www/
+- sudo mv ~/eccube-4.0.4/.htaccess /var/www/
+- sudo chown -R apache:apache /var/www/*
+- sudo vim /etc/httpd/conf/httpd.conf
+    - 以下の通りApache2の設定ファイルを155行目付近を書き換える
+```txt
+<Directory "/var/www/html">
+#AllowOverride None
+AllowOverride All
+```
+    - 以下の通り167行目付近のルートディレクトリ設定を書き換える
+```txt
+<IfModule dir_module>
+     DirectoryIndex index.html index.php
+</IfModule>
+```
+- sudo systemctl restart httpd.service
+- ブラウザで動作確認
+    - 127.0.0.1:2080/index.php
+    - EC-CUBEのインストール画面が表示されれば成功
+
+
 
 ## 参考ページ
 - Server World 初期設定 : リポジトリを追加する2019
