@@ -2,7 +2,7 @@
 ## 検証環境
 - 仮想化ツール1：Vagrant 2.2.7
 - 仮想化ツール2：Oracle VirtualBox 6.1.4
-- ゲストOS：Cent OS 8.2.2004 (bento/centos-8.0)
+- ゲストOS：Cent OS 8.2.2004 (bento/centos-8.2)
 https://app.vagrantup.com/bento/boxes/centos-8.0
 - Vagrantプラグイン：vagrant-vbguest
 - ツール1：Apache 2.4.37
@@ -162,8 +162,8 @@ Vagrantfileの記載は以下の通り。
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/centos-8.0"
-  config.vm.network "forwarded_port", guest: 2080, host: 8080   # HTTP
+  config.vm.box = "bento/centos-8.2"
+  config.vm.network "forwarded_port", guest: 80, host: 8080   # HTTP
   config.vm.network "forwarded_port", guest: 443, host: 20443  # HTTPS
   config.vm.provider "virtualbox" do |vb|
   end
