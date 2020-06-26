@@ -4,8 +4,9 @@
 - 仮想化ツール2：Oracle VirtualBox 6.1.4
 - ゲストOS：Cent OS 8.2.2004 (bento/centos-8.0)
 https://app.vagrantup.com/bento/boxes/centos-8.0
-ツール1：Apache 2.4.37
-ツール2：PHP 7.2.24
+- Vagrantプラグイン：vagrant-vbguest
+- ツール1：Apache 2.4.37
+- ツール2：PHP 7.2.24
 
 ## コマンドメモ
 ### 環境構築
@@ -32,12 +33,7 @@ set title
 set smartindent
 ```
 
-### ここで保存
-- exit
-- vagrant snapshot save savepoint_001 --force
-- vagrant snapshot list
-
-### Apacheインストール
+### Apacheインストールと初期設定
 - sudo yum install -y httpd
     - httpd -v
 - sudo systemctl start httpd.service
@@ -45,11 +41,12 @@ set smartindent
 - ブラウザで動作確認
     - 127.0.0.1:2080
     - ウェルカムページが表示されたら成功
-
-### ここで保存
-- exit
-- vagrant snapshot save savepoint_002 --force
-- vagrant snapshot list
+- sudo vim /etc/httpd/conf/httpd.conf
+    - 以下のVimコマンドを実行しApache2の設定ファイルを書き換える
+    - %s/AllowOverride none/AllowOverride all/
+    - %s/AllowOverride None/AllowOverride ALL/
+    - %s/DirectoryIndex index.html/DirectoryIndex index.php/
+    - wq!
 
 ### PHPインストール
 - sudo yum install -y epel-release
@@ -66,11 +63,6 @@ set smartindent
 - sudo rm /var/www/html/info.php
     - ファイル削除
 
-### ここで保存
-- exit
-- vagrant snapshot save savepoint_003 --force
-- vagrant snapshot list
-
 ### MariaDBの設定
 - sudo yum install -y mariadb mariadb-server
 - sudo systemctl enable mariadb.service
@@ -79,40 +71,90 @@ set smartindent
     - password: ec-cube
 - mysql -uroot -p
     - MariaDB> create user ecuser identified by 'ec-cube';
-    - MariaDB> create database ec-cube;
-    - MariaDB> grant all privileges on ec-cube.* TO 'ecuser';
+    - MariaDB> create database ecdata;
+    - MariaDB> grant all privileges on ecdata.* TO 'ecuser';
     - MariaDB> flush privileges;
     - MariaDB> exit;
-- mysql -u eccube -p
+- mysql -u ecuser -p
     - password：ec-cube
     - show databases;
-    - テーブル「ec-cube」が表示されれば成功
+    - テーブル「ecdata」が表示されれば成功
 - exit
-
-### ここで保存
-- exit
-- vagrant snapshot save savepoint_004 --force
-- vagrant snapshot list
 
 ### EC-Cubeのインストール
 - sudo wget http://downloads.ec-cube.net/src/eccube-4.0.4.zip
 - sudo unzip eccube-4.0.4.zip
 - sudo chmod 775 -R /var/www/
-- sudo mv ~/eccube-4.0.4/* /var/www/
-- sudo mv ~/eccube-4.0.4/.htaccess /var/www/
+- sudo cp -r ~/eccube-4.0.4/. /var/www/html/
 - sudo chown -R apache:apache /var/www/*
-- sudo vim /etc/httpd/conf/httpd.conf
-    - 以下のVimコマンドを実行しApache2の設定ファイルを書き換える
-    - 
 - sudo systemctl restart httpd.service
 - ブラウザで動作確認
     - 127.0.0.1:2080/index.php
     - EC-CUBEのインストール画面が表示されれば成功
 
 ### ブラウザ操作によるEC-CUbeインストール
+- P1 ようこそ
+    - 「次へ進む」ボタンをクリック
+- P2 権限ページ
+    - 「次へ進む」ボタンをクリック
+- P2 サイトの設定
+    - あなたの店名：ECテスト演習店舗
+    - メールアドレス：test@test.jp
+    - 管理画面ログインID：admin
+    - 管理画面パスワード：adminpasswd
+    - 管理画面のディレクトリ名：adminconsole
+    - それ以外の項目は操作しない
+    - 「次へ進む」ボタンをクリック
+- P3 データベースの設定
+    - データベースの種類：MySQL
+    - データベースのホスト名：localhost
+    - データベースのポート番号：空欄
+    - データベース名：ecdata
+    - ユーザ名：ecuser
+    - パスワード：ec-cube
+- P4 データベースの初期化
+    - 「次へ進む」ボタンをクリック
+- P5 インストール完了
+    - 「管理画面を表示」ボタンをクリック
+- ログイン画面
+    - ログインID：admin
+    - パスワード：adminpasswd
+- EC-CUBEの管理画面が表示されれば成功
 
+## 補足説明
+### はまったところ1：EC-CUBEフォルダ内の不可視ファイル
+EC-CUBEのファイルをルートディレクトリに移動させる際、以下3種類の不可視ファイルも移動させる必要がある。  
+```txt
+.htaccess
+.env.install
+.env.dist
+```
+「.htaccess」を移動させるのみでは、ブラウザからのアクセス時にエラーが発生する。
 
-## 付録
+### はまったところ2：ルートディレクトリの権限
+ルートディレクトリ「/var/www/html」の権限はファイル移動前に「755」に設定する。  
+設定をしてから移動させないと、Permission Errorが発生する。  
+また、設定を間違えるとブラウザからのアクセス時にエラーが発生する。  
+
+### はまったところ3：MariaDBのユーザー設定
+よく解説ページに書いているように、以下SQL分でユーザーを登録するとエラーになる。
+
+```txt
+grant all privileges on ecdata.* to ecuser@localhost IDENTIFIED BY 'password';
+```
+
+文字列「ecuser@localhost」全体がユーザ名として登録されるため、ブラウザでのDB/EC-CUBEの接続設定ができない。
+そのため、以下のように登録用のSQL文を分けて対応した。
+
+```txt
+create user ecuser identified by 'password';
+create database ecdata;
+grant all privileges on ecdata.* TO 'ecuser';
+flush privileges;
+exit;
+```
+  
+### Vagrantfileの記載
 Vagrantfileの記載は以下の通り。
 
 ```ruby
@@ -127,9 +169,11 @@ Vagrant.configure("2") do |config|
   end
 end
 ```
-
-
-## 参考ページ
+  
+### 参考ページ
+以下のページを参考に手順を組み立てた。  
+EC-CUBEのインストール手順はいずれも実行するとエラーが発生し最後まで進めることができない。実際にコマンドを入力しての動作確認を怠っていると思われる。  
+  
 - Server World 初期設定 : リポジトリを追加する2019
     - [https://www.server-world.info/query?os=CentOS_8&p=initial_conf&f=7](https://www.server-world.info/query?os=CentOS_8&p=initial_conf&f=7)
 - Server World Apache httpd : PHP スクリプトを利用する
