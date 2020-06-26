@@ -4,8 +4,9 @@
 - 仮想化ツール2：Oracle VirtualBox 6.1.4
 - ゲストOS：Cent OS 8.2.2004 (bento/centos-8.0)
 https://app.vagrantup.com/bento/boxes/centos-8.0
-ツール1：Apache 2.4.37
-ツール2：PHP 7.2.24
+- Vagrantプラグイン：vagrant-vbguest
+- ツール1：Apache 2.4.37
+- ツール2：PHP 7.2.24
 
 ## コマンドメモ
 ### 環境構築
@@ -32,12 +33,7 @@ set title
 set smartindent
 ```
 
-### ここで保存
-- exit
-- vagrant snapshot save savepoint_001 --force
-- vagrant snapshot list
-
-### Apacheインストール
+### Apacheインストールと初期設定
 - sudo yum install -y httpd
     - httpd -v
 - sudo systemctl start httpd.service
@@ -45,11 +41,12 @@ set smartindent
 - ブラウザで動作確認
     - 127.0.0.1:2080
     - ウェルカムページが表示されたら成功
-
-### ここで保存
-- exit
-- vagrant snapshot save savepoint_002 --force
-- vagrant snapshot list
+- sudo vim /etc/httpd/conf/httpd.conf
+    - 以下のVimコマンドを実行しApache2の設定ファイルを書き換える
+    - %s/AllowOverride none/AllowOverride all/
+    - %s/AllowOverride None/AllowOverride ALL/
+    - %s/DirectoryIndex index.html/DirectoryIndex index.php/
+    - wq!
 
 ### PHPインストール
 - sudo yum install -y epel-release
@@ -66,11 +63,6 @@ set smartindent
 - sudo rm /var/www/html/info.php
     - ファイル削除
 
-### ここで保存
-- exit
-- vagrant snapshot save savepoint_003 --force
-- vagrant snapshot list
-
 ### MariaDBの設定
 - sudo yum install -y mariadb mariadb-server
 - sudo systemctl enable mariadb.service
@@ -78,58 +70,123 @@ set smartindent
 - mysql_secure_installation
     - password: ec-cube
 - mysql -uroot -p
-    - create database eccube;
-    - grant all privileges on eccube.* to eccube@localhost IDENTIFIED BY 'ec-cube';
-    - exit
-- mysql -u eccube -p
+    - MariaDB> create user ecuser identified by 'ec-cube';
+    - MariaDB> create database ecdata;
+    - MariaDB> grant all privileges on ecdata.* TO 'ecuser';
+    - MariaDB> flush privileges;
+    - MariaDB> exit;
+- mysql -u ecuser -p
     - password：ec-cube
     - show databases;
-    - テーブル「ec-cube」が表示されれば成功
+    - テーブル「ecdata」が表示されれば成功
 - exit
-
-### ここで保存
-- exit
-- vagrant snapshot save savepoint_004 --force
-- vagrant snapshot list
 
 ### EC-Cubeのインストール
 - sudo wget http://downloads.ec-cube.net/src/eccube-4.0.4.zip
 - sudo unzip eccube-4.0.4.zip
-- sudo mv ~/eccube-4.0.4/* /var/www/
-- sudo mv ~/eccube-4.0.4/.htaccess /var/www/
+- sudo chmod 775 -R /var/www/
+- sudo cp -r ~/eccube-4.0.4/. /var/www/html/
 - sudo chown -R apache:apache /var/www/*
-- sudo vim /etc/httpd/conf/httpd.conf
-    - 以下の通りApache2の設定ファイルを155行目付近を書き換える
-```txt
-<Directory "/var/www/html">
-#AllowOverride None
-AllowOverride All
-```
-    - 以下の通り167行目付近のルートディレクトリ設定を書き換える
-```txt
-<IfModule dir_module>
-     DirectoryIndex index.html index.php
-</IfModule>
-```
 - sudo systemctl restart httpd.service
 - ブラウザで動作確認
     - 127.0.0.1:2080/index.php
     - EC-CUBEのインストール画面が表示されれば成功
 
+### ブラウザ操作によるEC-CUbeインストール
+- P1 ようこそ
+    - 「次へ進む」ボタンをクリック
+- P2 権限ページ
+    - 「次へ進む」ボタンをクリック
+- P2 サイトの設定
+    - あなたの店名：ECテスト演習店舗
+    - メールアドレス：test@test.jp
+    - 管理画面ログインID：admin
+    - 管理画面パスワード：adminpasswd
+    - 管理画面のディレクトリ名：adminconsole
+    - それ以外の項目は操作しない
+    - 「次へ進む」ボタンをクリック
+- P3 データベースの設定
+    - データベースの種類：MySQL
+    - データベースのホスト名：localhost
+    - データベースのポート番号：空欄
+    - データベース名：ecdata
+    - ユーザ名：ecuser
+    - パスワード：ec-cube
+- P4 データベースの初期化
+    - 「次へ進む」ボタンをクリック
+- P5 インストール完了
+    - 「管理画面を表示」ボタンをクリック
+- ログイン画面
+    - ログインID：admin
+    - パスワード：adminpasswd
+- EC-CUBEの管理画面が表示されれば成功
 
+## 補足説明
+### はまったところ1：EC-CUBEフォルダ内の不可視ファイル
+EC-CUBEのファイルをルートディレクトリに移動させる際、以下3種類の不可視ファイルも移動させる必要がある。  
+```txt
+.htaccess
+.env.install
+.env.dist
+```
+「.htaccess」を移動させるのみでは、ブラウザからのアクセス時にエラーが発生する。
 
-## 参考ページ
+### はまったところ2：ルートディレクトリの権限
+ルートディレクトリ「/var/www/html」の権限はファイル移動前に「755」に設定する。  
+設定をしてから移動させないと、Permission Errorが発生する。  
+また、設定を間違えるとブラウザからのアクセス時にエラーが発生する。  
+
+### はまったところ3：MariaDBのユーザー設定
+よく解説ページに書いているように、以下SQL分でユーザーを登録するとエラーになる。
+
+```txt
+grant all privileges on ecdata.* to ecuser@localhost IDENTIFIED BY 'password';
+```
+
+文字列「ecuser@localhost」全体がユーザ名として登録されるため、ブラウザでのDB/EC-CUBEの接続設定ができない。
+そのため、以下のように登録用のSQL文を分けて対応した。
+
+```txt
+create user ecuser identified by 'password';
+create database ecdata;
+grant all privileges on ecdata.* TO 'ecuser';
+flush privileges;
+exit;
+```
+  
+### Vagrantfileの記載
+Vagrantfileの記載は以下の通り。
+
+```ruby
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/centos-8.0"
+  config.vm.network "forwarded_port", guest: 2080, host: 8080   # HTTP
+  config.vm.network "forwarded_port", guest: 443, host: 20443  # HTTPS
+  config.vm.provider "virtualbox" do |vb|
+  end
+end
+```
+  
+### 参考ページ
+以下のページを参考に手順を組み立てた。  
+EC-CUBEのインストール手順はいずれも実行するとエラーが発生し最後まで進めることができない。実際にコマンドを入力しての動作確認を怠っていると思われる。  
+  
 - Server World 初期設定 : リポジトリを追加する2019
-    - https://www.server-world.info/query?os=CentOS_8&p=initial_conf&f=7
+    - [https://www.server-world.info/query?os=CentOS_8&p=initial_conf&f=7](https://www.server-world.info/query?os=CentOS_8&p=initial_conf&f=7)
 - Server World Apache httpd : PHP スクリプトを利用する
-    - https://www.server-world.info/query?os=CentOS_8&p=httpd&f=6
+    - [https://www.server-world.info/query?os=CentOS_8&p=httpd&f=6](https://www.server-world.info/query?os=CentOS_8&p=httpd&f=6)
 - CentOS 8にEC-CUBE 4をインストールした時の自分用メモ
-    - https://qiita.com/okazy/items/6069f58345c0c42de439
+    - [https://qiita.com/okazy/items/6069f58345c0c42de439](https://qiita.com/okazy/items/6069f58345c0c42de439)
 - CentOS7にEC-Cube3をインストール（yumのみ）
-    - https://labo-study.com/2016/01/26/centos7%E3%81%ABec-cube3%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%EF%BC%88yum%E3%81%AE%E3%81%BF%EF%BC%89/
+    - [https://labo-study.com/2016/01/26/centos7%E3%81%ABec-cube3%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%EF%BC%88yum%E3%81%AE%E3%81%BF%EF%BC%89/](https://labo-study.com/2016/01/26/centos7%E3%81%ABec-cube3%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%EF%BC%88yum%E3%81%AE%E3%81%BF%EF%BC%89/)
 - EC-CUBE3　超簡単インストールのご紹介 Linux
-    - https://sys-guard.com/post-6825/
+    - [https://sys-guard.com/post-6825/](https://sys-guard.com/post-6825/)
 - 【初心者向け】EC-CUBE のインストール方法、失敗しない手順を図で解説します
-    - https://www.yamatofinancial.jp/learning/pre-opening/how-to-install-ec-cube.html
+    - [https://www.yamatofinancial.jp/learning/pre-opening/how-to-install-ec-cube.html](https://www.yamatofinancial.jp/learning/pre-opening/how-to-install-ec-cube.html)
 - さくらVPS(CentOS 7)にEC-CUBE 3.0をインストールする
-    - https://risa-webstore.com/blog/?p=71
+    - [https://risa-webstore.com/blog/?p=71](https://risa-webstore.com/blog/?p=71)
+- Vimの置換コマンドまとめ
+    - [https://qiita.com/lightning5x5/items/e5162cb3e4b6d38b439d](https://qiita.com/lightning5x5/items/e5162cb3e4b6d38b439d)
