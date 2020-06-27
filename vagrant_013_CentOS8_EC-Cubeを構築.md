@@ -8,6 +8,12 @@ https://app.vagrantup.com/bento/boxes/centos-8.0
 - ツール1：Apache 2.4.37
 - ツール2：PHP 7.2.24
 
+構築済みのイメージをVagrant Cloudの以下に保存した。
+  
+- ユーザー：https://app.vagrantup.com/aiit-alpha-team
+- イメージ名：aiit-alpha-team/CentOS-8.2_EC-Cube-4.4
+- URL： [https://app.vagrantup.com/aiit-alpha-team/boxes/CentOS-8.2_EC-Cube-4.4](https://app.vagrantup.com/aiit-alpha-team/boxes/CentOS-8.2_EC-Cube-4.4)
+
 ## コマンドメモ
 ### 環境構築
 - vagrant init bento/centos-8.0
