@@ -34,8 +34,8 @@ set smartindent
 ```
 
 ### Apacheインストールと初期設定
-- sudo yum install -y httpd
-    - httpd -v
+- sudo yum install -y httpd && httpd -v
+    - バージョン番号が表示されれば成功
 - sudo systemctl start httpd.service
 - sudo systemctl enable httpd.service
 - ブラウザで動作確認
@@ -50,8 +50,7 @@ set smartindent
 
 ### PHPインストール
 - sudo yum install -y epel-release
-- sudo yum --enablerepo=epel install -y php php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-pecl-apcu php-pecl-zendopcache php-mbstring php-intl php-zip php-phar php-zlib php-ctype php-session php-libxml php-openssl php-curl php-fileinfo
-- php -v
+- sudo yum --enablerepo=epel install -y php php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-pecl-apcu php-pecl-zendopcache php-mbstring php-intl php-zip php-phar php-zlib php-ctype php-session php-libxml php-openssl php-curl php-fileinfo && php -v
     - バージョン情報が表示されれば成功
 - sudo touch /var/www/html/info.php
 - sudo chmod 766 /var/www/html/info.php
@@ -120,6 +119,13 @@ set smartindent
     - ログインID：admin
     - パスワード：adminpasswd
 - EC-CUBEの管理画面が表示されれば成功
+
+### 設定後の挙動
+ホスト環境のブラウザから以下の通り接続することができようになる。
+
+- 管理画面：http://127.0.0.1:2080/adminconsole/
+- ユーザ画面：http://127.0.0.1:2080/
+
 
 ## 補足説明
 ### はまったところ1：EC-CUBEフォルダ内の不可視ファイル
