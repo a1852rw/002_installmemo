@@ -174,10 +174,22 @@ URL内にて初期設定として実施している作業は以下の通り。
 - EC-CUBEの管理画面が表示されれば成功
 
 ### 設定後の挙動
-ホスト環境のブラウザから以下の通り接続することができようになる。
+ゲスト環境のブラウザから以下の通り接続することができるようになる。
 
 - 管理画面：http://127.0.0.1/adminconsole/
 - ユーザ画面：http://127.0.0.1/
+
+### EC-CUBEインストール後の設定
+#### Firefoxの設定
+以下をブックマークに追加
+- 管理画面：http://127.0.0.1/adminconsole/
+- ユーザ画面：http://127.0.0.1/
+
+#### 自動アップデートの停止
+演習環境が変更されることを防ぐため自動アップデートのポップアップ表示を停止。
+
+- sudo sed -i -e 's/1/0/g' etc/apt/apt.conf.d/20auto-upgrades
+    - 設定ファイル内の「1」(=自動アップデートあり)を「0」(=自動アップデートなし)に書き換える。
 
 
 
@@ -332,7 +344,10 @@ end
     - https://www.server-world.info/query?os=Ubuntu_19.04&p=httpd&f=1
 - Server World Apache2 : PHPスクリプトを利用する
     - https://www.server-world.info/query?os=Ubuntu_19.04&p=httpd&f=3
-
+- sedでこういう時はどう書く?
+    - https://qiita.com/hirohiro77/items/7fe2f68781c41777e507
+- テキストの置換処理を得意とするスクリプト言語 sed
+    - https://bi.biopapyrus.jp/os/linux/sed.html
 
 <!---
 EC-CUBEのインストール手順はいずれも実行するとエラーが発生し最後まで進めることができない。実際にコマンドを入力しての動作確認を怠っていると思われる。  
