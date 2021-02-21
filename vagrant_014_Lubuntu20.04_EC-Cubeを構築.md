@@ -83,6 +83,13 @@ URL内にて初期設定として実施している作業は以下の通り。
 ### Libre Officeのインストール
 - sudo apt-get install -y libreoffice
 
+### セーブポイント作成
+- extit
+- vagrant snapshot save savepoint_001
+- vagrant snapshot list
+    - savepoint_001 が表示されれば保存成功
+- vagrant ssh
+
 ### Apache/PHPのインストールと設定
 - ApacheはPHPインストール時に自動的にインストールされる
 - sudo apt-get install -y php
