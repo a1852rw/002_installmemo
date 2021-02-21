@@ -99,11 +99,15 @@ restrict 10.0.0.0 mask 255.255.255.0 nomodify notrap
 
 ### PHPのインストールと設定
 - ApacheはPHPインストール時に自動的にインストールされる
-- sudo apt-get install -y php apache2
-- php -v
-- apache2 -v
-- sudo systemctl restart apache2
-- sudo systemctl enable apache2
+- sudo apt-get install -y php
+- PHPの拡張機能をまとめてインストール
+    - sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-pecl-apcu php-pecl-zendopcache php-mbstring php-intl php-zip php-phar php-zlib php-ctype php-session php-libxml php-openssl php-curl php-fileinfo
+- インストールの確認
+    - php -v
+    - apache2 -v
+- Apache2の自動起動設定
+    - sudo systemctl restart apache2
+    - sudo systemctl enable apache2
 - ブラウザを開き動作確認
     - http://localhost:2080
     - Apacheが表示されれば成功

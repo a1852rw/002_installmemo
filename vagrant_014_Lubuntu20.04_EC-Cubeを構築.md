@@ -85,16 +85,92 @@ URL内にて初期設定として実施している作業は以下の通り。
 
 ### Apache/PHPのインストールと設定
 - ApacheはPHPインストール時に自動的にインストールされる
-- sudo apt-get install -y php apache2
-- php -v
-- apache2 -v
-- sudo systemctl restart apache2
-- sudo systemctl enable apache2
-- ブラウザ(インストール済みのFirefox)を開き動作確認
+- sudo apt-get install -y php
+- sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-pecl-apcu php-pecl-zendopcache php-mbstring php-intl php-zip php-phar php-zlib php-ctype php-session php-libxml php-openssl php-curl php-fileinfo
+- PHP/Apacheのインストールを確認。バージョン情報が表示されれば成功。
+    - php -v
+    - apache2 -v
+- Apache2の自動起動を設定
+    - sudo systemctl restart apache2
+    - sudo systemctl enable apache2
+- 仮想デスクトップ内でブラウザ(インストール済みのFirefox)を開き動作確認
     - http://localhost
     - Apacheが表示されれば成功
 
+### PHP/Apaceh初期設定
+- sudo touch /var/www/html/info.php
+- sudo chmod 766 /var/www/html/info.php
+- sudo echo '<?php phpinfo(); ?>' > /var/www/html/info.php
+- sudo systemctl restart apache2
+- ブラウザで動作確認
+    - 127.0.0.1:2080/info.php
+    - PHPの情報ページが表示されれば成功
+- sudo rm /var/www/html/info.php
+    - ファイル削除
 
+### MariaDBの設定
+- sudo apt-get install -y mariadb mariadb-server
+- sudo systemctl enable mariadb
+- sudo systemctl start mariadb
+- mysql_secure_installation
+    - password: ec-cube
+- mysql -uroot -p
+    - MariaDB> create user ecuser identified by 'ec-cube';
+    - MariaDB> create database ecdata;
+    - MariaDB> grant all privileges on ecdata.* TO 'ecuser';
+    - MariaDB> flush privileges;
+    - MariaDB> exit;
+- mysql -u ecuser -p
+    - password：ec-cube
+    - show databases;
+    - テーブル「ecdata」が表示されれば成功
+- exit
+
+### EC-Cubeのインストール
+- sudo wget http://downloads.ec-cube.net/src/eccube-4.0.4.zip
+- sudo unzip eccube-4.0.4.zip
+- sudo chmod 775 -R /var/www/
+- sudo cp -r ~/eccube-4.0.4/. /var/www/html/
+- sudo chown -R apache:apache /var/www/*
+- sudo systemctl restart apache2
+- ブラウザで動作確認
+    - 127.0.0.1/index.php
+    - EC-CUBEのインストール画面が表示されれば成功
+
+### ブラウザ操作によるEC-CUbeインストール
+- P1 ようこそ
+    - 「次へ進む」ボタンをクリック
+- P2 権限ページ
+    - 「次へ進む」ボタンをクリック
+- P2 サイトの設定
+    - あなたの店名：ECテスト演習店舗
+    - メールアドレス：test@test.jp
+    - 管理画面ログインID：admin
+    - 管理画面パスワード：adminpasswd
+    - 管理画面のディレクトリ名：adminconsole
+    - それ以外の項目は操作しない
+    - 「次へ進む」ボタンをクリック
+- P3 データベースの設定
+    - データベースの種類：MySQL
+    - データベースのホスト名：localhost
+    - データベースのポート番号：空欄
+    - データベース名：ecdata
+    - ユーザ名：ecuser
+    - パスワード：ec-cube
+- P4 データベースの初期化
+    - 「次へ進む」ボタンをクリック
+- P5 インストール完了
+    - 「管理画面を表示」ボタンをクリック
+- ログイン画面
+    - ログインID：admin
+    - パスワード：adminpasswd
+- EC-CUBEの管理画面が表示されれば成功
+
+### 設定後の挙動
+ホスト環境のブラウザから以下の通り接続することができようになる。
+
+- 管理画面：http://127.0.0.1/adminconsole/
+- ユーザ画面：http://127.0.0.1/
 
 
 
@@ -246,10 +322,9 @@ end
 ### 参考ページ
 以下のページを参考に手順を組み立てた。  
 - Server World Apache2 : インストール
-    - https://www.server-world.info/query?os=Ubuntu_18.04&p=httpd&f=1
+    - https://www.server-world.info/query?os=Ubuntu_19.04&p=httpd&f=1
 - Server World Apache2 : PHPスクリプトを利用する
-    - https://www.server-world.info/query?os=Ubuntu_18.04&p=httpd&f=3
-
+    - https://www.server-world.info/query?os=Ubuntu_19.04&p=httpd&f=3
 
 
 <!---
