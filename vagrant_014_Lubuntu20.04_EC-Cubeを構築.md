@@ -27,9 +27,61 @@ https://app.vagrantup.com/bento/boxes/ubuntu-20.04
 初期設定の内容については、以下URLを参照  
 URL： [https://github.com/a1852rw/005_vagrantfile/tree/master/004_Lunutu_20.04](https://github.com/a1852rw/005_vagrantfile/tree/master/004_Lunutu_20.04)
 
+URL内にて初期設定として実施している作業は以下の通り。
+
+#### ゲスト OSの更新
+- sudo apt-get update -y
+
+#### デスクトップ環境のインストール
+- sudo yes Y | sudo apt-get install -y --no-install-recommends lubuntu-desktop
+- sudo sleep 20s
+
+#### GUIモードの設定
+- sudo systemctl set-default graphical.target
+- sudo sleep 20s
+
+#### 再度のゲストOS更新
+- sudo apt-get update -y
+
+#### 日本語環境の設定
+- sudo apt-get install -y fonts-ipafont fonts-ipaexfont
+- sudo apt-get install -y language-pack-ja-base language-pack-ja ibus fcitx fcitx-mozc 
+- sudo apt-get install -y firefox-locale-ja language-pack-gnome-ja
+- sudo update-locale LANG=ja_JP.UTF-8 LANGUAGE=”ja_JP:ja” LC_ALL=ja_JP.UTF-8
+- sudo localectl set-keymap jp106
+- sudo fc-cache -fv
+- fc-match IPAGothic
+    
+#### 時刻の設定
+- sudo timedatectl set-timezone Asia/Tokyo
+- sudo systemctl enable systemd-timesyncd.service
+
+#### その他必要なソフトの追加
+- sudo apt-get install -y firefox vim wget curl tree git featherpad
+
+#### vim設定カスタマイズ
+- sudo echo " " >> /etc/vimrc
+- sudo echo "set number" >> /etc/vimrc
+- sudo echo "set title" >> /etc/vimrc
+- sudo echo "syntax on" >> /etc/vimrc
+- sudo echo "set smartindent" >> /etc/vimrc
+- sudo echo " " >> /etc/vimrc
+- sudo echo "highlight Comment ctermfg=Green" >> /etc/vimrc
+- sudo echo "highlight Constant ctermfg=Red" >> /etc/vimrc
+- sudo echo "highlight Identifier ctermfg=Cyan" >> /etc/vimrc
+- sudo echo "highlight Statement ctermfg=Yellow" >> /etc/vimrc
+- sudo echo "highlight Title ctermfg=Magenta" >> /etc/vimrc
+- sudo echo "highlight Special ctermfg=Magenta" >> /etc/vimrc
+- sudo echo "highlight PreProc ctermfg=Magenta" >> /etc/vimrc
+- sudo echo " " >> /etc/vimrc
+- sudo echo "set tabstop=2" >> /etc/vimrc
+- sudo echo "set shiftwidth=2" >> /etc/vimrc
+
+#### ゲストOSの再起動
+- sudo shutdown -r now
+
 ### Libre Officeのインストール
 - sudo apt-get install -y libreoffice
-
 
 ### Apache/PHPのインストールと設定
 - ApacheはPHPインストール時に自動的にインストールされる
@@ -38,9 +90,13 @@ URL： [https://github.com/a1852rw/005_vagrantfile/tree/master/004_Lunutu_20.04]
 - apache2 -v
 - sudo systemctl restart apache2
 - sudo systemctl enable apache2
-- ブラウザを開き動作確認
-    - http://localhost:2080
+- ブラウザ(インストール済みのFirefox)を開き動作確認
+    - http://localhost
     - Apacheが表示されれば成功
+
+
+
+
 
 <!---
 ### Apacheインストールと初期設定
