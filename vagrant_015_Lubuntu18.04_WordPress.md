@@ -128,21 +128,21 @@ URL内にて初期設定として実施している作業は以下の通り。
 
 ### MariaDBの設定
 - sudo apt-get install -y mariadb-server
-- sudo vim /etc/my.cnf
+- sudo vim /etc/mysql/mariadb.conf.d/50-server.cnf
 ```cnf
 [mysqld] セクション内に追記
 character-set-server=utf8
 ```
 - sudo systemctl enable mariadb
-- sudo systemctl restart mariadb
-- mysql -uroot -p
+- sudo systemctl start mariadb
+- sudo mysql -uroot -p
     - password:vagrant
     - MariaDB> create user wordpress identified by 'wordpresspasswd';
     - MariaDB> create database wordpress;
     - MariaDB> grant all privileges on wordpress.* TO 'wordpress';
     - MariaDB> flush privileges;
     - MariaDB> exit;
-- mysql -u ecuser -p
+- sudo mysql -u wordpress -p
     - password：wordpresspasswd
     - MariaDB> show databases;
     - テーブル「wordpress」が表示されれば成功
@@ -155,20 +155,26 @@ character-set-server=utf8
     - savepoint_004 が表示されれば保存成功
 - vagrant ssh
 
-### WordPressのインストール
-
-
-<!---
-### EC-Cubeのインストール
-- sudo wget http://downloads.ec-cube.net/src/eccube-4.0.4.zip
-- sudo unzip eccube-4.0.4.zip
+### WordPress4.9のインストール
+- sudo wget https://ja.wordpress.org/wordpress-4.9-ja.zip
+- sudo unzip wordpress-4.9-ja.zip
 - sudo chmod 775 -R /var/www/
-- sudo cp -r ~/eccube-4.0.4/. /var/www/html/
+- sudo cp -r ~/wordpress/. /var/www/html/wordpress
 - sudo chown -R www-data:www-data /var/www/*
 - sudo systemctl restart apache2
 - ブラウザで動作確認
-    - 127.0.0.1/index.php
-    - EC-CUBEのインストール画面が表示されれば成功
+    - http://127.0.0.1/wordpress/index.php
+    - http://127.0.0.1/wordpress/wp-admin/setup-config.php に遷移しwordpressの設定画面が表示されれば成功
+
+<!---
+- sudo cp /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.org 
+- sudo vim /etc/httpd/conf/httpd.conf
+```cnf
+DocumentRoot "/var/www/wordpress"
+<Directory "/var/www/wordpress">
+    AllowOverride All
+</Directory>
+```
 --->
 
 ### セーブポイント作成
@@ -178,40 +184,26 @@ character-set-server=utf8
     - savepoint_005 が表示されれば保存成功
 - vagrant ssh
 
-### ブラウザ操作によるEC-CUbeインストール
-- P1 ようこそ
-    - 「次へ進む」ボタンをクリック
-- P2 権限ページ
-    - 「次へ進む」ボタンをクリック
-- P2 サイトの設定
-    - あなたの店名：ECテスト演習店舗
-    - メールアドレス：test@test.jp
-    - 管理画面ログインID：admin
-    - 管理画面パスワード：adminpasswd
-    - 管理画面のディレクトリ名：adminconsole
-    - それ以外の項目は操作しない
-    - 「次へ進む」ボタンをクリック
-- P3 データベースの設定
-    - データベースの種類：MySQL
+### WordPressの設定
+- ブラウザでアクセス
+    - http://127.0.0.1/wordpress/index.php
+- データベースの設定
+    - データベース名：wordpress
+    - ユーザー名：wordpress
+    - パスワード：wordpresspasswd
     - データベースのホスト名：localhost
-    - データベースのポート番号：空欄
-    - データベース名：ecdata
-    - ユーザ名：ecuser
-    - パスワード：ec-cube
-- P4 データベースの初期化
-    - 「次へ進む」ボタンをクリック
-- P5 インストール完了
-    - 「管理画面を表示」ボタンをクリック
-- ログイン画面
-    - ログインID：admin
-    - パスワード：adminpasswd
-- EC-CUBEの管理画面が表示されれば成功
+- ブログの設定
+	- タイトル：wordpress the world ブログ(仮)
+	- 管理者ユーザ名：wordpress_2021
+	- パスワード：wordpress_2021
+	- メールアドレス：test@test.jp
+	- 検索エンジンがこのサイトをインデックスしないようにする：有効
 
 ### 設定後の挙動
 ゲスト環境のブラウザから以下の通り接続することができるようになる。
 
-- 管理画面：http://127.0.0.1/index.php/adminconsole/
-- ユーザ画面：http://127.0.0.1/index.php/
+- 管理画面：http://127.0.0.1/wordpress/wp-admin
+- ユーザ画面：http://1276.0.0.1/wordpress/
 
 
 ### セーブポイント作成
@@ -224,16 +216,15 @@ character-set-server=utf8
 ### EC-CUBEインストール後の設定
 #### Firefoxの設定
 以下をブックマークに追加
-- 管理画面：http://127.0.0.1/index.php/adminconsole/
-- ユーザ画面：http://127.0.0.1/index.php/
+- 管理画面：http://127.0.0.1/wordpress/wp-admin
+- ユーザ画面：http://1276.0.0.1/wordpress/
 
 #### 自動アップデートの停止
 演習環境が変更されることを防ぐため自動アップデートのポップアップ表示を停止(GUI上で手動の操作)。
 
 ### パッケージ出力
 とりあえずここでBOXファイルを出力してVagrant BOXにアップ
-
-なぜかメモ帳以外は日本語入力で紀伊問題があったり、構築手順が怪しかったりするが現時点では目をつぶる。
+動作確認はまた後日。
 
 ### 参考ページ
 以下のページを参考に手順を組み立てた。  
@@ -247,24 +238,5 @@ character-set-server=utf8
     - https://qiita.com/hirohiro77/items/7fe2f68781c41777e507
 - テキストの置換処理を得意とするスクリプト言語 sed
     - https://bi.biopapyrus.jp/os/linux/sed.html
-
-<!---
-EC-CUBEのインストール手順はいずれも実行するとエラーが発生し最後まで進めることができない。実際にコマンドを入力しての動作確認を怠っていると思われる。  
-  
-- Server World 初期設定 : リポジトリを追加する2019
-    - [https://www.server-world.info/query?os=CentOS_8&p=initial_conf&f=7](https://www.server-world.info/query?os=CentOS_8&p=initial_conf&f=7)
-- Server World Apache httpd : PHP スクリプトを利用する
-    - [https://www.server-world.info/query?os=CentOS_8&p=httpd&f=6](https://www.server-world.info/query?os=CentOS_8&p=httpd&f=6)
-- CentOS 8にEC-CUBE 4をインストールした時の自分用メモ
-    - [https://qiita.com/okazy/items/6069f58345c0c42de439](https://qiita.com/okazy/items/6069f58345c0c42de439)
-- CentOS7にEC-Cube3をインストール（yumのみ）
-    - [https://labo-study.com/2016/01/26/centos7%E3%81%ABec-cube3%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%EF%BC%88yum%E3%81%AE%E3%81%BF%EF%BC%89/](https://labo-study.com/2016/01/26/centos7%E3%81%ABec-cube3%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%EF%BC%88yum%E3%81%AE%E3%81%BF%EF%BC%89/)
-- EC-CUBE3　超簡単インストールのご紹介 Linux
-    - [https://sys-guard.com/post-6825/](https://sys-guard.com/post-6825/)
-- 【初心者向け】EC-CUBE のインストール方法、失敗しない手順を図で解説します
-    - [https://www.yamatofinancial.jp/learning/pre-opening/how-to-install-ec-cube.html](https://www.yamatofinancial.jp/learning/pre-opening/how-to-install-ec-cube.html)
-- さくらVPS(CentOS 7)にEC-CUBE 3.0をインストールする
-    - [https://risa-webstore.com/blog/?p=71](https://risa-webstore.com/blog/?p=71)
-- Vimの置換コマンドまとめ
-    - [https://qiita.com/lightning5x5/items/e5162cb3e4b6d38b439d](https://qiita.com/lightning5x5/items/e5162cb3e4b6d38b439d)
---->
+- Ubuntu 18.04 LTS に WordPress 5.3 をインストール
+    - https://qiita.com/cherubim1111/items/265cfbbe91adb44562d5

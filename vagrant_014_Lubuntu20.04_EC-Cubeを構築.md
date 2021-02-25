@@ -138,11 +138,7 @@ URL内にて初期設定として実施している作業は以下の通り。
 - sudo apt-get install -y mariadb-server
 - sudo systemctl enable mariadb
 - sudo systemctl start mariadb
-<!---
-- mysql_secure_installation
-    - password: ec-cube
---->
-- mysql -uroot -p
+- sudo mysql -uroot -p
     - password:vagrant
     - MariaDB> create user ecuser identified by 'ec-cube';
     - MariaDB> create database ecdata;
