@@ -10,27 +10,33 @@ https://app.vagrantup.com/bento/boxes/ubuntu-20.04
 
 構築済みのイメージをVagrant Cloudの以下に保存した。
   
-- ユーザー：
-- イメージ名：
-- URL： []()
+- ユーザー：a1852rw
+- イメージ名：Lubuntu-20.04_EC-Cube-4.1.0
+- URL：[https://app.vagrantup.com/aiit-alpha-team/boxes/Lubuntu-20.04_EC-Cube-4.1.0](https://app.vagrantup.com/aiit-alpha-team/boxes/Lubuntu-20.04_EC-Cube-4.1.0)
+
+また、当ファイルに記載の方法で作成しVagrant CloudにアップしたBOXファイルを使用するためのVagrantfileを以下に保存した。
+
+- ディレクトリ名：006_Lubuntu_20.04_EC-Cube
+- ファイル名：Vagrantfile
+- URL：[https://github.com/a1852rw/005_vagrantfile/006_Lubuntu_20.04_EC-Cube](https://github.com/a1852rw/005_vagrantfile/006_Lubuntu_20.04_EC-Cube)
 
 ## コマンドメモ
 ### 環境構築
 - vagrant init bento/ununtu-20.04
 - vagrant up
 
-元にしたイメージは「bento/ununtu-20.04」だが、実際には初期設定完了済みの以下イメージを使用した。
+元にしたイメージは「bento/ununtu-20.04」だが、実際には以下「初期設定」に記載の手順により初期設定完了している以下イメージを使用することが可能。  
 
 - aiit-alpha-team/Lubuntu-20.04_Desktop-Core
 
-### 初期設定
 初期設定の内容については、以下URLを参照  
 URL： [https://github.com/a1852rw/005_vagrantfile/tree/master/004_Lunutu_20.04](https://github.com/a1852rw/005_vagrantfile/tree/master/004_Lunutu_20.04)
 
 URL内にて初期設定として実施している作業は以下の通り。
 
+### 初期設定
 #### ゲスト OSの更新
-- sudo apt-get update -y
+- sudo apt-get update -y && sudo apt-get upgrade -y
 
 #### デスクトップ環境のインストール
 - sudo yes Y | sudo apt-get install -y --no-install-recommends lubuntu-desktop
@@ -45,8 +51,8 @@ URL内にて初期設定として実施している作業は以下の通り。
 
 #### 日本語環境の設定
 - sudo apt-get install -y fonts-ipafont fonts-ipaexfont
-- sudo apt-get install -y language-pack-ja-base language-pack-ja ibus fcitx fcitx-mozc 
-- sudo apt-get install -y firefox-locale-ja language-pack-gnome-ja
+- sudo apt-get install -y language-pack-ja-base language-pack-ja ibus fcitx-mozc 
+- sudo apt-get install -y firefox-locale-ja language-pack-gnome-ja language-pack-kde-ja
 - sudo update-locale LANG=ja_JP.UTF-8 LANGUAGE=”ja_JP:ja” LC_ALL=ja_JP.UTF-8
 - sudo localectl set-keymap jp106
 - sudo fc-cache -fv
@@ -57,7 +63,7 @@ URL内にて初期設定として実施している作業は以下の通り。
 - sudo systemctl enable systemd-timesyncd.service
 
 #### その他必要なソフトの追加
-- sudo apt-get install -y firefox vim wget curl tree git featherpad
+- sudo apt-get install -y firefox vim wget curl tree git featherpad chromium-browser
 
 #### vim設定カスタマイズ
 - sudo echo " " >> /etc/vimrc
@@ -80,9 +86,8 @@ URL内にて初期設定として実施している作業は以下の通り。
 #### ゲストOSの再起動
 - sudo shutdown -r now
 
-### Libre Officeのインストール
-- sudo apt-get install -y libreoffice libreoffice-l10n-ja libreoffice-help-ja
-- sudo apt-get install -y libreoffice-gtk
+#### メモ
+以上で初期設定は完了。
 
 ### セーブポイント作成
 - extit
@@ -94,11 +99,7 @@ URL内にて初期設定として実施している作業は以下の通り。
 ### Apache/PHPのインストールと設定
 - ApacheはPHPインストール時に自動的にインストールされる
 - sudo apt-get install -y php
-
-<!--- 
-- sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-pecl-apcu php-pecl-zendopcache php-mbstring php-intl php-zip php-phar php-zlib php-ctype php-session php-libxml php-openssl php-curl php-fileinfo
---->
-- sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-mbstring php-intl php-zip php-phar php-ctype php-curl php-fileinfo
+- sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-intl php-zip php-phar php-ctype php-curl php-fileinfo
 - PHP/Apacheのインストールを確認。バージョン情報が表示されれば成功。
     - php -v
     - apache2 -v
@@ -121,8 +122,8 @@ URL内にて初期設定として実施している作業は以下の通り。
 - sudo chmod 766 /var/www/html/info.php
 - sudo echo '<?php phpinfo(); ?>' > /var/www/html/info.php
 - sudo systemctl restart apache2
-- ブラウザで動作確認
-    - 127.0.0.1/info.php
+- 仮想デスクトップ内でFirefoxを起動し動作確認
+    - http://127.0.0.1/info.php
     - PHPの情報ページが表示されれば成功
 - sudo rm /var/www/html/info.php
     - ファイル削除
@@ -159,10 +160,10 @@ URL内にて初期設定として実施している作業は以下の通り。
 - vagrant ssh
 
 ### EC-Cubeのインストール
-- sudo wget http://downloads.ec-cube.net/src/eccube-4.0.4.zip
-- sudo unzip eccube-4.0.4.zip
+- sudo wget http://downloads.ec-cube.net/src/eccube-4.1.0.zip
+- sudo unzip eccube-4.1.0.zip
 - sudo chmod 775 -R /var/www/
-- sudo cp -r ~/eccube-4.0.4/. /var/www/html/
+- sudo cp -r ~/ec-cube/. /var/www/html/
 - sudo chown -R www-data:www-data /var/www/*
 - sudo systemctl restart apache2
 - ブラウザで動作確認
@@ -211,7 +212,6 @@ URL内にて初期設定として実施している作業は以下の通り。
 - 管理画面：http://127.0.0.1/index.php/adminconsole/
 - ユーザ画面：http://127.0.0.1/index.php/
 
-
 ### セーブポイント作成
 - extit
 - vagrant snapshot save savepoint_006
@@ -221,7 +221,7 @@ URL内にて初期設定として実施している作業は以下の通り。
 
 ### EC-CUBEインストール後の設定
 #### Firefoxの設定
-以下をブックマークに追加
+GUI操作により以下をブックマークに追加する。これによりFirefox起動後すぐに演習を開始できるようになる。
 - 管理画面：http://127.0.0.1/index.php/adminconsole/
 - ユーザ画面：http://127.0.0.1/index.php/
 
@@ -229,9 +229,14 @@ URL内にて初期設定として実施している作業は以下の通り。
 演習環境が変更されることを防ぐため自動アップデートのポップアップ表示を停止(GUI上で手動の操作)。
 
 ### パッケージ出力
-とりあえずここでBOXファイルを出力してVagrant BOXにアップ
+BOXファイルを出力してVagrant Cloudにアップロードする。まずは以下コマンドでBOXファイルを出力。
 
-なぜかメモ帳以外は日本語入力で紀伊問題があったり、構築手順が怪しかったりするが現時点では目をつぶる。
+- vagrant package
+
+出力されたBOXファイルをWeb上の以下ページからアップロード。
+
+- Vagrant Cloud
+    - https://app.vagrantup.com/
 
 ### 参考ページ
 以下のページを参考に手順を組み立てた。  
@@ -245,24 +250,7 @@ URL内にて初期設定として実施している作業は以下の通り。
     - https://qiita.com/hirohiro77/items/7fe2f68781c41777e507
 - テキストの置換処理を得意とするスクリプト言語 sed
     - https://bi.biopapyrus.jp/os/linux/sed.html
-
-<!---
-EC-CUBEのインストール手順はいずれも実行するとエラーが発生し最後まで進めることができない。実際にコマンドを入力しての動作確認を怠っていると思われる。  
-  
-- Server World 初期設定 : リポジトリを追加する2019
-    - [https://www.server-world.info/query?os=CentOS_8&p=initial_conf&f=7](https://www.server-world.info/query?os=CentOS_8&p=initial_conf&f=7)
-- Server World Apache httpd : PHP スクリプトを利用する
-    - [https://www.server-world.info/query?os=CentOS_8&p=httpd&f=6](https://www.server-world.info/query?os=CentOS_8&p=httpd&f=6)
-- CentOS 8にEC-CUBE 4をインストールした時の自分用メモ
-    - [https://qiita.com/okazy/items/6069f58345c0c42de439](https://qiita.com/okazy/items/6069f58345c0c42de439)
-- CentOS7にEC-Cube3をインストール（yumのみ）
-    - [https://labo-study.com/2016/01/26/centos7%E3%81%ABec-cube3%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%EF%BC%88yum%E3%81%AE%E3%81%BF%EF%BC%89/](https://labo-study.com/2016/01/26/centos7%E3%81%ABec-cube3%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%EF%BC%88yum%E3%81%AE%E3%81%BF%EF%BC%89/)
-- EC-CUBE3　超簡単インストールのご紹介 Linux
-    - [https://sys-guard.com/post-6825/](https://sys-guard.com/post-6825/)
-- 【初心者向け】EC-CUBE のインストール方法、失敗しない手順を図で解説します
-    - [https://www.yamatofinancial.jp/learning/pre-opening/how-to-install-ec-cube.html](https://www.yamatofinancial.jp/learning/pre-opening/how-to-install-ec-cube.html)
-- さくらVPS(CentOS 7)にEC-CUBE 3.0をインストールする
-    - [https://risa-webstore.com/blog/?p=71](https://risa-webstore.com/blog/?p=71)
-- Vimの置換コマンドまとめ
-    - [https://qiita.com/lightning5x5/items/e5162cb3e4b6d38b439d](https://qiita.com/lightning5x5/items/e5162cb3e4b6d38b439d)
---->
+- lubuntu 20.04 で自動ログインする方法　[PC]
+    - https://staka.blog.ss-blog.jp/2021-02-26
+- linuxBean ： Firefoxで日本語入力ができなくなった
+    - https://ameblo.jp/karakurenainimizu/entry-12138877583.html
