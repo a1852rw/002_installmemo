@@ -238,6 +238,41 @@ BOXファイルを出力してVagrant Cloudにアップロードする。まず�
 - Vagrant Cloud
     - https://app.vagrantup.com/
 
+---
+
+## 追加手順：自動テスト演習環境の構築
+ここまで設定したLubutu20.04上のEC-Cube環境を進化させ、自動テスト演習環境にするため追加の手順を記載する。  
+自動テストツールとしてSelenium IDEおよび作業用のエディタ等、動作を補助するツールをインストールした。
+
+### Selenium IDEの導入
+- 演習環境内でGoogle Chromeを起動しSelenium IDEのストアページを開く
+    - ページタイトル：Selenium IDE
+    - URL：https://chrome.google.com/webstore/detail/selenium-ide/mooikfkahbdckldjjndioackbalphokd?utm_source=chrome-ntp-icon
+- 「Chromeに追加」ボタンをクリックする。確認画面が表示される。
+- 「拡張機能を追加」ボタンをクリックする。Selenium IDEのアドオンのインストールが開始される。
+- Google Chrome右上に「Selenium IDE」ボタンが追加される。
+- 「Selenium IDE」ボタンをクリックするとSelenium IDEが起動し、テストの記録/自動実行ができるようになる。
+
+### Visual Studio Codeの導入
+すでにFeatherPadが導入されているため不要と思われるが、テキストエディタのデファクトスタンダードであるため導入する。  
+Seleniumのスクリプトを編集するため使用する。  
+
+- sudo wget -O /home/vagrant/ダウンロード/vscode.deb https://go.microsoft.com/fwlink/?LinkID=760868
+- sudo apt install -y /home/vagrant/ダウンロード/vscode.deb
+- デスクトップ画面左下の「メニュー」ボタンから「アクセサリ」を選択し、「Visual Studio Code」をクリックする
+- Visual Studio Codeが起動する
+    - 好みに応じて日本語化プラグイン(プラグイン検索画面で「Japanese」で検索)をインストールする
+
+### パッケージ出力
+追加手順を行ったBOXファイルを出力してVagrant Cloudにアップロードする。
+
+- vagrant package
+
+出力されたBOXファイルをWeb上の以下ページから再度アップロード。
+
+- Vagrant Cloud
+    - https://app.vagrantup.com/
+
 
 ### 参考ページ
 以下のページを参考に手順を組み立てた。  
@@ -255,3 +290,7 @@ BOXファイルを出力してVagrant Cloudにアップロードする。まず�
     - https://staka.blog.ss-blog.jp/2021-02-26
 - linuxBean ： Firefoxで日本語入力ができなくなった
     - https://ameblo.jp/karakurenainimizu/entry-12138877583.html
+- Selenium IDE公式ページ：Get-Started
+    - https://www.selenium.dev/selenium-ide/docs/en/introduction/getting-started
+- Debian and Ubuntu based distributions
+    - https://code.visualstudio.com/docs/setup/linux#_debian-and-ubuntu-based-distributions
