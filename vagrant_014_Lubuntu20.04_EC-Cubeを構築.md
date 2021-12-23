@@ -63,7 +63,7 @@ URL内にて初期設定として実施している作業は以下の通り。
 - sudo systemctl enable systemd-timesyncd.service
 
 #### その他必要なソフトの追加
-- sudo apt-get install -y firefox vim wget curl tree git featherpad chromium-browser
+- sudo apt-get install -y firefox vim wget curl tree git featherpad
 
 #### vim設定カスタマイズ
 - sudo echo " " >> /etc/vimrc
@@ -243,6 +243,13 @@ BOXファイルを出力してVagrant Cloudにアップロードする。まず�
 ## 追加手順：自動テスト演習環境の構築
 ここまで設定したLubutu20.04上のEC-Cube環境を進化させ、自動テスト演習環境にするため追加の手順を記載する。  
 自動テストツールとしてSelenium IDEおよび作業用のエディタ等、動作を補助するツールをインストールした。
+
+### Google Chromeのインストール
+- sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+- sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+- sudo apt-get update -y
+- sudo apt-get install -y google-chrome-stable
+- 仮想デスクトップ上でGoogle Chromeが起動することを確認する
 
 ### Selenium IDEの導入
 - 演習環境内でGoogle Chromeを起動しSelenium IDEのストアページを開く
