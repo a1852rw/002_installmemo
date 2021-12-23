@@ -63,7 +63,7 @@ URL内にて初期設定として実施している作業は以下の通り。
 - sudo systemctl enable systemd-timesyncd.service
 
 #### その他必要なソフトの追加
-- sudo apt-get install -y firefox vim wget curl tree git featherpad chromium-browser
+- sudo apt-get install -y firefox vim wget curl tree git featherpad
 
 #### vim設定カスタマイズ
 - sudo echo " " >> /etc/vimrc
@@ -99,7 +99,9 @@ URL内にて初期設定として実施している作業は以下の通り。
 ### Apache/PHPのインストールと設定
 - ApacheはPHPインストール時に自動的にインストールされる
 - sudo apt-get install -y php
-- sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-intl php-zip php-phar php-ctype php-curl php-fileinfo
+- sudo apt-get install -y libonig-dev libxml2-dev
+- sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-intl php-zip php-phar php-ctype php-curl php-fileinfo php-opcache php-pdo php-fpm php-json php-cli php-common php-mysql
+
 - PHP/Apacheのインストールを確認。バージョン情報が表示されれば成功。
     - php -v
     - apache2 -v
@@ -212,6 +214,13 @@ URL内にて初期設定として実施している作業は以下の通り。
 - 管理画面：http://127.0.0.1/index.php/adminconsole/
 - ユーザ画面：http://127.0.0.1/index.php/
 
+管理画面で以下のユーザ情報をテスト用に登録。
+
+- ユーザ名：test@test.jp
+- パスワード：test_test
+
+テスト テスト
+
 ### セーブポイント作成
 - extit
 - vagrant snapshot save savepoint_006
@@ -224,6 +233,7 @@ URL内にて初期設定として実施している作業は以下の通り。
 GUI操作により以下をブックマークに追加する。これによりFirefox起動後すぐに演習を開始できるようになる。
 - 管理画面：http://127.0.0.1/index.php/adminconsole/
 - ユーザ画面：http://127.0.0.1/index.php/
+- Selenium逆引きサイト：https://www.seleniumqref.com/
 
 #### 自動アップデートの停止
 演習環境が変更されることを防ぐため自動アップデートのポップアップ表示を停止(GUI上で手動の操作)。
@@ -244,6 +254,16 @@ BOXファイルを出力してVagrant Cloudにアップロードする。まず�
 ここまで設定したLubutu20.04上のEC-Cube環境を進化させ、自動テスト演習環境にするため追加の手順を記載する。  
 自動テストツールとしてSelenium IDEおよび作業用のエディタ等、動作を補助するツールをインストールした。
 
+### Google Chromeのインストール
+- sudo wget https://dl.google.com/linux/linux_signing_key.pub
+- sudo apt-key add linux_signing_key.pub
+- sudo echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
+- sudo apt-get update
+- sudo apt-get install google-chrome-stable
+
+- sudo shutdown -r now
+    - インストール直後は動作が遅いので一度再起動する
+
 ### Selenium IDEの導入
 - 演習環境内でGoogle Chromeを起動しSelenium IDEのストアページを開く
     - ページタイトル：Selenium IDE
@@ -252,6 +272,42 @@ BOXファイルを出力してVagrant Cloudにアップロードする。まず�
 - 「拡張機能を追加」ボタンをクリックする。Selenium IDEのアドオンのインストールが開始される。
 - Google Chrome右上に「Selenium IDE」ボタンが追加される。
 - 「Selenium IDE」ボタンをクリックするとSelenium IDEが起動し、テストの記録/自動実行ができるようになる。
+
+### Selenium WebDriverの導入
+
+
+
+
+
+以下ファイルを仮想デスクトップ上のVisual Studio Codeで作成するか、ホストOS上で作成する。
+作成後に以下ディレクトリに保存する。
+
+- /home/vagrant/selenium_script
+
+```python (test_001.py)
+from selenium import webdriver
+ 
+#ChromeDriverのパスを引数に指定しChromeを起動
+driver = webdriver.Chrome("/usr/local/bin/chromedriver")
+#指定したURLに遷移
+driver.get("https://www.google.co.jp")
+```
+
+```python (test_002.py)
+from selenium import webdriver
+ 
+#ChromeDriverのパスを引数に指定しChromeを起動
+driver = webdriver.Chrome("/usr/local/bin/chromedriver")
+#指定したURLに遷移
+driver.get("https://www.google.co.jp")
+
+element = driver.find_element_by_link_text("画像")
+#画像のリンクをクリック
+element.click()
+
+```
+
+
 
 ### Visual Studio Codeの導入
 すでにFeatherPadが導入されているため不要と思われるが、テキストエディタのデファクトスタンダードであるため導入する。  
