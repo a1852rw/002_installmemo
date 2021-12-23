@@ -101,7 +101,6 @@ URL内にて初期設定として実施している作業は以下の通り。
 - sudo apt-get install -y php
 - sudo apt-get install -y libonig-dev libxml2-dev
 - sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-intl php-zip php-phar php-ctype php-curl php-fileinfo php-opcache php-pdo php-fpm php-json php-cli php-common php-mysql
-
 - PHP/Apacheのインストールを確認。バージョン情報が表示されれば成功。
     - php -v
     - apache2 -v
@@ -255,14 +254,18 @@ BOXファイルを出力してVagrant Cloudにアップロードする。まず�
 自動テストツールとしてSelenium IDEおよび作業用のエディタ等、動作を補助するツールをインストールした。
 
 ### Google Chromeのインストール
-- sudo wget https://dl.google.com/linux/linux_signing_key.pub
-- sudo apt-key add linux_signing_key.pub
-- sudo echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
-- sudo apt-get update
-- sudo apt-get install google-chrome-stable
-
+- FireFoxでGoogle Chrome配布サイトへアクセスし、インストールプログラムをダウンロードする
+    - https://www.google.com/intl/ja_jp/chrome/
+    - インストール後にいコマンドを実行しパッケージからインストールを実施する
+- sudo dpkg -i /tmp/mozilla_vagrant0/google-chrome-stable_current_amd64.deb
 - sudo shutdown -r now
-    - インストール直後は動作が遅いので一度再起動する
+    - インストール直後は動作が遅いので一度再起動する。再起動すると動作が正常化する。
+- GUI操作により以下をブックマークに追加する。これによりFirefox起動後すぐに演習を開始できるようになる。
+    - 管理画面：http://127.0.0.1/index.php/adminconsole/
+    - ユーザ画面：http://127.0.0.1/index.php/
+    - Selenium逆引きサイト：https://www.seleniumqref.com/
+
+※ どうやってもGoogle Chromeの動作が改善しないので断念する。後日余裕があれば環境構築からやり直す。
 
 ### Selenium IDEの導入
 - 演習環境内でGoogle Chromeを起動しSelenium IDEのストアページを開く
@@ -273,42 +276,6 @@ BOXファイルを出力してVagrant Cloudにアップロードする。まず�
 - Google Chrome右上に「Selenium IDE」ボタンが追加される。
 - 「Selenium IDE」ボタンをクリックするとSelenium IDEが起動し、テストの記録/自動実行ができるようになる。
 
-### Selenium WebDriverの導入
-
-
-
-
-
-以下ファイルを仮想デスクトップ上のVisual Studio Codeで作成するか、ホストOS上で作成する。
-作成後に以下ディレクトリに保存する。
-
-- /home/vagrant/selenium_script
-
-```python (test_001.py)
-from selenium import webdriver
- 
-#ChromeDriverのパスを引数に指定しChromeを起動
-driver = webdriver.Chrome("/usr/local/bin/chromedriver")
-#指定したURLに遷移
-driver.get("https://www.google.co.jp")
-```
-
-```python (test_002.py)
-from selenium import webdriver
- 
-#ChromeDriverのパスを引数に指定しChromeを起動
-driver = webdriver.Chrome("/usr/local/bin/chromedriver")
-#指定したURLに遷移
-driver.get("https://www.google.co.jp")
-
-element = driver.find_element_by_link_text("画像")
-#画像のリンクをクリック
-element.click()
-
-```
-
-
-
 ### Visual Studio Codeの導入
 すでにFeatherPadが導入されているため不要と思われるが、テキストエディタのデファクトスタンダードであるため導入する。  
 Seleniumのスクリプトを編集するため使用する。  
@@ -317,7 +284,61 @@ Seleniumのスクリプトを編集するため使用する。
 - sudo apt install -y /home/vagrant/ダウンロード/vscode.deb
 - デスクトップ画面左下の「メニュー」ボタンから「アクセサリ」を選択し、「Visual Studio Code」をクリックする
 - Visual Studio Codeが起動する
-    - 好みに応じて日本語化プラグイン(プラグイン検索画面で「Japanese」で検索)をインストールする
+    - 日本語化プラグイン(プラグイン検索画面で「Japanese」で検索)をインストールする
+        - https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja
+    - Pythonプラグイン(プラグイン検索画面で「Python」で検索)をインストールする
+        -  https://marketplace.visualstudio.com/items?itemName=ms-python.python
+
+### Selenium WebDriverの導入
+- sudo mkdir /home/vagrant/selenium_script
+- sudo chown -hR  vagrant:vagrant /home/vagrant/selenium_script
+- 以下ファイルを作成し、ディレクトリ「/home/vagrant/selenium_script」に保存する
+
+```python (test_001.py)
+from selenium import webdriver
+ 
+#ChromeDriverのパスを引数に指定しChromeを起動
+driver = webdriver.Chrome("/home/vagrant/selenium_script/chromedriver")
+#指定したURLに遷移
+driver.get("https://www.google.co.jp")
+driver.quit()
+```
+
+```python (test_002.py)
+#指定したURLに遷移
+driver.get("https://www.google.co.jp")
+
+element = driver.find_element_by_link_text("画像")
+#画像のリンクをクリック
+element.click()
+driver.quit()
+```
+
+以下コマンドにより、WebDriverをインストールする。
+
+- python3 --version
+    - まずはPythnがインストールされていることを確認する。「Python 3.x」と表示されれば成功
+- pip3 --version
+    - 次にPIP3がインストールされていることを確認する。「pop X.XX」と表示されれば成功
+- sudo apt-get install -y python3-selenium
+- pip3 show selenium
+    - インストールに成功していればSeleniumのバージョンが表示される
+- google-chrome --version
+    - GoogleChromeのバージョンを確認する
+- GoogleChromeのバージョンにあったWebDriverを以下ページで確認し、コマンドに埋め込んでダウンロードする。
+    - 参照ページ：https://chromedriver.chromium.org/downloads
+    - wget -a /home/vagrant/selenium_script/chromedriver.zip [ここにURLを記載] 
+    - 下記コマンドは、ページよりバージョン96のダウンロードURLを確認し、作成したもの。
+        - wget -O /home/vagrant/selenium_script/chromedriver.zip https://chromedriver.storage.googleapis.com/96.0.4664.35/chromedriver_linux64.zip
+        - sudo unzip -d /home/vagrant/selenium_script/ /home/vagrant/selenium_script/chromedriver.zip 
+ 
+以下コマンドにより動作確認を行う
+
+- python3 /home/vagrant/selenium_script/test_001.py
+- python3 /home/vagrant/selenium_script/test_002.py
+
+Google Chromeが動作すれば設定完了。
+
 
 ### パッケージ出力
 追加手順を行ったBOXファイルを出力してVagrant Cloudにアップロードする。
