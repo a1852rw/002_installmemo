@@ -20,9 +20,9 @@ https://app.vagrantup.com/bento/boxes/ubuntu-18.04
 
 また、当ファイルに記載の方法で作成しVagrant CloudにアップしたBOXファイルを使用するためのVagrantfileを以下に保存した。
 
-- ディレクトリ名：作成中
+- ディレクトリ名：007_Lubuntu_18.04_Selenium
 - ファイル名：Vagrantfile
-- URL：[https://github.com/a1852rw/005_vagrantfile/XXXX作成中](https://github.com/a1852rw/005_vagrantfile/XXXX作成中)
+- URL：[https://github.com/a1852rw/005_vagrantfile/007_Lubuntu_18.04_Selenium](https://github.com/a1852rw/005_vagrantfile/007_Lubuntu_18.04_Selenium)
 
 ## コマンドメモ
 ### 環境構築
