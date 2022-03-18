@@ -2,37 +2,37 @@
 ## 検証環境
 - 仮想化ツール1：Vagrant 2.2.7
 - 仮想化ツール2：Oracle VirtualBox 6.1.12
-- ゲストOS： Lubuntu 18.04 (bento/ubuntu-18.04)
-https://app.vagrantup.com/bento/boxes/ubuntu-18.04
+- ゲストOS： Lubuntu 20.04 (bento/ubuntu-20.04)
+https://app.vagrantup.com/bento/boxes/ubuntu-20.04
 - Vagrantプラグイン：vagrant-vbguest
 - ツール1：Apache 2.4.41
 - ツール2：PHP 7.4.3
 - ツール3：EC-Cube 4.1.0
-- ツール4：Selenium IDE
-- ツール5：Selenium (Python)
-- ツール6：Selenium WebDriver (Google Chrome)
+- ツール4：OWASP ZAP <バージョンは後程確認> 
 
 構築済みのイメージをVagrant Cloudの以下に保存した。
   
 - ユーザー：a1852rw
-- イメージ名：Lubuntu-18.04_Selenium
-- URL：[aiit-alpha-team/Lubuntu-18.04_Selenium](aiit-alpha-team/Lubuntu-18.04_Selenium)
+- イメージ名 <保存前>
+- URL：[<保存前>](<保存前>)
 
 また、当ファイルに記載の方法で作成しVagrant CloudにアップしたBOXファイルを使用するためのVagrantfileを以下に保存した。
 
-- ディレクトリ名：007_Lubuntu_18.04_Selenium
+- ディレクトリ名：009_Lubuntu_20.04_Desktop_full
 - ファイル名：Vagrantfile
-- URL：[https://github.com/a1852rw/005_vagrantfile/007_Lubuntu_18.04_Selenium](https://github.com/a1852rw/005_vagrantfile/007_Lubuntu_18.04_Selenium)
+- URL：[https://github.com/a1852rw/005_vagrantfile/tree/master/008_Lubuntu_20.04_Desktop_full](https://github.com/a1852rw/005_vagrantfile/tree/master/008_Lubuntu_20.04_Desktop_full)
 
+手順を構築中のためコメントアウト 
+<!---
 ## コマンドメモ
 ### 環境構築
-- vagrant init bento/ununtu-18.04
+- vagrant init bento/ununtu-20.04
 - vagrant up
 
-元にしたイメージは「bento/ununtu-18.04」だが、実際には以下「初期設定」に記載の手順により初期設定完了している以下イメージを使用することが可能。  
+元にしたイメージは「bento/ununtu-20.04」だが、実際には以下「初期設定」に記載の手順により初期設定完了している以下イメージを使用することが可能。  
 
-- aiit-alpha-team/Lubuntu-18.04_Desktop
-    - URL：[https://app.vagrantup.com/aiit-alpha-team/boxes/Lubuntu-18.04_Desktop](https://app.vagrantup.com/aiit-alpha-team/boxes/Lubuntu-18.04_Desktop)
+- aiit-alpha-team/Lubuntu-20.04_Desktop
+    - URL：[https://app.vagrantup.com/aiit-alpha-team/boxes/Lubuntu-20.04_Desktop](https://app.vagrantup.com/aiit-alpha-team/boxes/Lubuntu-20.04_Desktop)
 
 初期設定の内容については、以下URLを参照  
 - 構築テキスト作成中
@@ -91,6 +91,7 @@ URL内にて初期設定として実施している作業は以下の通り。
 
 #### メモ
 以上で初期設定は完了。
+--->
 
 ### Apache/PHPのインストールと設定
 - ApacheはPHPインストール時に自動的にインストールされる
@@ -198,125 +199,33 @@ GUI操作により以下をブックマークに追加する。これによりFi
 演習環境が変更されることを防ぐため自動アップデートのポップアップ表示を停止(GUI上で手動の操作)。
 
 ---
+### OWASP ZAPによる演習環境の構築
+#### JREのダウンロードとインスト―ル
+sudo add-apt-repository -y ppa:openjdk-r/ppa && sudo apt-get update
+sudo apt-get install -y openjdk-11-jre
 
-## 自動テスト演習環境の構築
-ここまで設定したLubutu18.04上のEC-Cube環境を進化させ、自動テスト演習環境にするため追加の手順を記載する。  
-自動テストツールとしてSelenium IDEおよび作業用のエディタ等、動作を補助するツールをインストールした。
+#### OWASP ZAPのダウンロードとインスト―ル
+sudo wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2_11_1_unix.sh -P /home/vagrant/Downloads
+sudo chmod +x /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
 
-### Google Chromeのインストール
-- FireFoxでGoogle Chrome配布サイトへアクセスし、インストールプログラムをダウンロードする
-    - https://www.google.com/intl/ja_jp/chrome/
-    - インストール後に以下コマンドを実行しパッケージからインストールを実施する
-- sudo dpkg -i /tmp/mozilla_vagrant0/google-chrome-stable_current_amd64.deb
-- sudo shutdown -r now
-    - インストール直後は動作が遅いので一度再起動する。再起動すると動作が正常化する。
-- GUI操作により以下をブックマークとホームページに追加する。これによりGoogle Chrome起動後すぐに演習を開始できるようになる。
-    - 管理画面：http://127.0.0.1/index.php/adminconsole/
-    - ユーザ画面：http://127.0.0.1/index.php/
-    - Selenium逆引きサイト：https://www.seleniumqref.com/
+### Firefoxの設定変更(手作業y
+#### OWASP ZAPの証明書をインポート委
+- FireFoxにOWAP ZAPで生成した証明書をインストールする
+<手順は後日記述する>
 
+#### FoxyProxyの設定
+- アドオンFoxy ProxyをFireFoxにインストール 
+    - Lubuntu上でFiredoxを起動し、以下URLにアクセスする
+    - https://addons.mozilla.org/ja/firefox/addon/foxyproxy-standard/
+    - アドオンをダウンロードしFirefoxにインストールする
+- FoxyProxyの設定
+    - 
+<手順は後日記述する>
 
-### Selenium IDEの導入
-- 演習環境内でGoogle Chromeを起動しSelenium IDEのストアページを開く
-    - ページタイトル：Selenium IDE
-    - URL：https://chrome.google.com/webstore/detail/selenium-ide/mooikfkahbdckldjjndioackbalphokd?utm_source=chrome-ntp-icon
-- 「Chromeに追加」ボタンをクリックする。確認画面が表示される。
-- 「拡張機能を追加」ボタンをクリックする。Selenium IDEのアドオンのインストールが開始される。
-- Google Chrome右上に「Selenium IDE」ボタンが追加される。
-- 「Selenium IDE」ボタンをクリックするとSelenium IDEが起動し、テストの記録/自動実行ができるようになる。
-
-### Visual Studio Codeの導入
-すでにFeatherPadが導入されているため不要と思われるが、テキストエディタのデファクトスタンダードであるため導入する。  
-Seleniumのスクリプトを編集するため使用する。  
-
-- sudo wget -O /home/vagrant/ダウンロード/vscode.deb https://go.microsoft.com/fwlink/?LinkID=760868
-- sudo apt install -y /home/vagrant/ダウンロード/vscode.deb
-- デスクトップ画面左下の「メニュー」ボタンから「アクセサリ」を選択し、「Visual Studio Code」をクリックする
-- Visual Studio Codeが起動する
-    - 日本語化プラグイン(プラグイン検索画面で「Japanese」で検索)をインストールする
-        - https://marketplace.visualstudio.com/items?itemName=MS-CEINTL.vscode-language-pack-ja
-    - Pythonプラグイン(プラグイン検索画面で「Python」で検索)をインストールする
-        -  https://marketplace.visualstudio.com/items?itemName=ms-python.python
-
-### Selenium WebDriverの導入
-- sudo mkdir /home/vagrant/selenium_script
-- sudo chown -hR  vagrant:vagrant /home/vagrant/selenium_script
-- 以下ファイルを作成し、ディレクトリ「/home/vagrant/selenium_script」に保存する
-
-```python (test_001.py)
-from selenium import webdriver
- 
-#ChromeDriverのパスを引数に指定しChromeを起動
-driver = webdriver.Chrome("/home/vagrant/selenium_script/chromedriver")
-#指定したURLに遷移
-driver.get("https://www.google.co.jp")
-driver.quit()
-```
-
-```python (test_002.py)
-#指定したURLに遷移
-driver.get("https://www.google.co.jp")
-
-element = driver.find_element_by_link_text("画像")
-#画像のリンクをクリック
-element.click()
-driver.quit()
-```
-
-以下コマンドにより、WebDriverをインストールする。
-
-- python3 --version
-    - まずはPythnがインストールされていることを確認する。「Python 3.x」と表示されれば成功
-- pip3 --version
-    - 次にPIP3がインストールされていることを確認する。「pop X.XX」と表示されれば成功
-- sudo apt-get install -y python3-selenium
-- pip3 show selenium
-    - インストールに成功していればSeleniumのバージョンが表示される
-- google-chrome --version
-    - GoogleChromeのバージョンを確認する
-- GoogleChromeのバージョンにあったWebDriverを以下ページで確認し、コマンドに埋め込んでダウンロードする。
-    - 参照ページ：https://chromedriver.chromium.org/downloads
-    - wget -a /home/vagrant/selenium_script/chromedriver.zip [ここにURLを記載] 
-    - 下記コマンドは、ページよりバージョン96のダウンロードURLを確認し、作成したもの。
-        - wget -O /home/vagrant/selenium_script/chromedriver.zip https://chromedriver.storage.googleapis.com/96.0.4664.35/chromedriver_linux64.zip
-        - sudo unzip -d /home/vagrant/selenium_script/ /home/vagrant/selenium_script/chromedriver.zip 
- 
-以下コマンドにより動作確認を行う
-
-- python3 /home/vagrant/selenium_script/test_001.py
-- python3 /home/vagrant/selenium_script/test_002.py
-
-Google Chromeが動作すれば設定完了。
-
-
-### パッケージ出力
-追加手順を行ったBOXファイルを出力してVagrant Cloudにアップロードする。
-
-- vagrant package
-
-出力されたBOXファイルをWeb上の以下ページから再度アップロード。
-
-- Vagrant Cloud
-    - https://app.vagrantup.com/
-
-
-### 参考ページ
-以下のページを参考に手順を組み立てた。  
-- Server World Apache2 : インストール
-    - https://www.server-world.info/query?os=Ubuntu_19.04&p=httpd&f=1
-- Server World Apache2 : PHPスクリプトを利用する
-    - https://www.server-world.info/query?os=Ubuntu_19.04&p=httpd&f=3
-- Server World Mariadb
-    - https://www.server-world.info/query?os=Ubuntu_19.04&p=mariadb&f=1
-- sedでこういう時はどう書く?
-    - https://qiita.com/hirohiro77/items/7fe2f68781c41777e507
-- テキストの置換処理を得意とするスクリプト言語 sed
-    - https://bi.biopapyrus.jp/os/linux/sed.html
-- lubuntu 20.04 で自動ログインする方法　[PC]
-    - https://staka.blog.ss-blog.jp/2021-02-26
-- linuxBean ： Firefoxで日本語入力ができなくなった
-    - https://ameblo.jp/karakurenainimizu/entry-12138877583.html
-- Selenium IDE公式ページ：Get-Started
-    - https://www.selenium.dev/selenium-ide/docs/en/introduction/getting-started
-- Debian and Ubuntu based distributions
-    - https://code.visualstudio.com/docs/setup/linux#_debian-and-ubuntu-based-distributions
+#### その他アドオンのインストール
+- Lununtu上でFireFoxを起動し、以下URLにアクセス。アドオン User-Agent Switcherをインストールする。
+    - https://addons.mozilla.org/ja/firefox/addon/user-agent-switcher-revived/
+    - 設定は特になし
+- Lununtu上でFireFoxを起動し、以下URLにアクセス。アドオン Wappalyzerをインストールする。
+    - https://addons.mozilla.org/ja/firefox/addon/wappalyzer/
+    - 設定は特になし
