@@ -1,4 +1,4 @@
-# Lubuntu20.04にEC-Cubeの検証環境を構築
+# Lubuntu20.04にEC-Cubeのセキュリティ演習環境を構築
 ## 検証環境
 - 仮想化ツール1：Vagrant 2.2.7
 - 仮想化ツール2：Oracle VirtualBox 6.1.12
@@ -8,90 +8,14 @@ https://app.vagrantup.com/bento/boxes/ubuntu-20.04
 - ツール1：Apache 2.4.41
 - ツール2：PHP 7.4.3
 - ツール3：EC-Cube 4.1.0
-- ツール4：OWASP ZAP <バージョンは後程確認> 
+- ツール4：OWASP ZAP v2.11.1
 
-構築済みのイメージをVagrant Cloudの以下に保存した。
-  
-- ユーザー：a1852rw
-- イメージ名 <保存前>
-- URL：[<保存前>](<保存前>)
+## 環境構築演習
+上記環境を構築する。  
+仮想デスクトップを起動しターミナルから以下操作を順に実施する。
 
-また、当ファイルに記載の方法で作成しVagrant CloudにアップしたBOXファイルを使用するためのVagrantfileを以下に保存した。
-
-- ディレクトリ名：009_Lubuntu_20.04_Desktop_full
-- ファイル名：Vagrantfile
-- URL：[https://github.com/a1852rw/005_vagrantfile/tree/master/008_Lubuntu_20.04_Desktop_full](https://github.com/a1852rw/005_vagrantfile/tree/master/008_Lubuntu_20.04_Desktop_full)
-
-手順を構築中のためコメントアウト 
-<!---
-## コマンドメモ
-### 環境構築
-- vagrant init bento/ununtu-20.04
-- vagrant up
-
-元にしたイメージは「bento/ununtu-20.04」だが、実際には以下「初期設定」に記載の手順により初期設定完了している以下イメージを使用することが可能。  
-
-- aiit-alpha-team/Lubuntu-20.04_Desktop
-    - URL：[https://app.vagrantup.com/aiit-alpha-team/boxes/Lubuntu-20.04_Desktop](https://app.vagrantup.com/aiit-alpha-team/boxes/Lubuntu-20.04_Desktop)
-
-初期設定の内容については、以下URLを参照  
-- 構築テキスト作成中
-
-URL内にて初期設定として実施している作業は以下の通り。
-
-### 初期設定
-#### ゲスト OSの更新
-- sudo apt-get update -y && sudo apt-get upgrade -y
-
-#### デスクトップ環境のインストール
-- sudo yes Y | sudo apt-get install -y lubuntu-core
-
-#### GUIモードの設定
-- sudo systemctl set-default graphical.target
-
-#### 再度のゲストOS更新
-- sudo apt-get update -y
-
-#### 日本語環境の設定
-- sudo apt-get install -y fonts-ipafont fonts-ipaexfont
-- sudo apt-get install -y language-pack-ja-base language-pack-ja ibus fcitx-mozc 
-- sudo apt-get install -y firefox-locale-ja language-pack-gnome-ja language-pack-kde-ja
-- sudo update-locale LANG=ja_JP.UTF-8 LANGUAGE=”ja_JP:ja” LC_ALL=ja_JP.UTF-8
-- sudo localectl set-keymap jp106
-- sudo fc-cache -fv
-- fc-match IPAGothic
-    
-#### 時刻の設定
-- sudo timedatectl set-timezone Asia/Tokyo
-- sudo systemctl enable systemd-timesyncd.service
-
-#### その他必要なソフトの追加
-- sudo apt-get install -y firefox vim wget curl tree git featherpad
-
-#### vim設定カスタマイズ
-- sudo echo " " >> /etc/vimrc
-- sudo echo "set number" >> /etc/vimrc
-- sudo echo "set title" >> /etc/vimrc
-- sudo echo "syntax on" >> /etc/vimrc
-- sudo echo "set smartindent" >> /etc/vimrc
-- sudo echo " " >> /etc/vimrc
-- sudo echo "highlight Comment ctermfg=Green" >> /etc/vimrc
-- sudo echo "highlight Constant ctermfg=Red" >> /etc/vimrc
-- sudo echo "highlight Identifier ctermfg=Cyan" >> /etc/vimrc
-- sudo echo "highlight Statement ctermfg=Yellow" >> /etc/vimrc
-- sudo echo "highlight Title ctermfg=Magenta" >> /etc/vimrc
-- sudo echo "highlight Special ctermfg=Magenta" >> /etc/vimrc
-- sudo echo "highlight PreProc ctermfg=Magenta" >> /etc/vimrc
-- sudo echo " " >> /etc/vimrc
-- sudo echo "set tabstop=2" >> /etc/vimrc
-- sudo echo "set shiftwidth=2" >> /etc/vimrc
-
-#### ゲストOSの再起動
-- sudo shutdown -r now
-
-#### メモ
-以上で初期設定は完了。
---->
+### ターミナルの起動
+- 「システムツール」内「QTerminal」をクリックする。ターミナルが起動する。
 
 ### Apache/PHPのインストールと設定
 - ApacheはPHPインストール時に自動的にインストールされる
@@ -116,8 +40,6 @@ URL内にて初期設定として実施している作業は以下の通り。
 - 仮想デスクトップ内でFirefoxを起動し動作確認
     - http://127.0.0.1/info.php
     - PHPの情報ページが表示されれば成功
-- sudo rm /var/www/html/info.php
-    - ファイル削除
 
 ### MariaDBの設定
 - sudo apt-get install -y mariadb-server
@@ -144,7 +66,7 @@ URL内にて初期設定として実施している作業は以下の通り。
 - sudo chown -R www-data:www-data /var/www/*
 - sudo systemctl restart apache2
 - ブラウザで動作確認
-    - 127.0.0.1/index.php
+    - http://127.0.0.1/index.php
     - EC-CUBEのインストール画面が表示されれば成功
 
 ### ブラウザ操作によるEC-CUbeインストール
@@ -187,18 +109,29 @@ URL内にて初期設定として実施している作業は以下の通り。
 - ユーザ名：test@test.jp
 - パスワード：test_test
 
+### PHP my adminのインストール
+- sudo apt-get install -y phpmyadmin
+- Apacheを選択
+    - 「はい」を選択
+- 「了解」を選択
+    - パスワード：phpmyadmin_test
+    - パスワードの確認：phpmyadmin_test
+- Apache側の設定
+    - sudo ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
+    - sudo a2enconf phpmyadmin.conf
+    - sudo systemctl restart apache2
 
-### EC-CUBEインストール後の設定
-#### Firefoxの設定
-GUI操作により以下をブックマークに追加する。これによりFirefox起動後すぐに演習を開始できるようになる。
-- 管理画面：http://127.0.0.1/index.php/adminconsole/
-- ユーザ画面：http://127.0.0.1/index.php/
-- Selenium逆引きサイト：https://www.seleniumqref.com/
+- 動作確認
+    - http://127.0.0.1/phpmyadmin
+    - 以下アカウントでログインし、データベース「ecdata」が表示されることを確認する
+        - ID：ecuser
+        - パスワード：ec-cube
 
-#### 自動アップデートの停止
-演習環境が変更されることを防ぐため自動アップデートのポップアップ表示を停止(GUI上で手動の操作)。
+    - 以下のphpmyadmin用のアカウントでもログイン可(EC-Cubeのデータは見れない)
+        - ID：phpmyadmin
+        - パスワード：phpmyadmin_test
 
----
+
 ### OWASP ZAPによる演習環境の構築
 #### JREのダウンロードとインスト―ル
 sudo add-apt-repository -y ppa:openjdk-r/ppa && sudo apt-get update
@@ -207,11 +140,55 @@ sudo apt-get install -y openjdk-11-jre
 #### OWASP ZAPのダウンロードとインスト―ル
 sudo wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2_11_1_unix.sh -P /home/vagrant/Downloads
 sudo chmod +x /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
+sudo /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
 
-### Firefoxの設定変更(手作業y
-#### OWASP ZAPの証明書をインポート委
-- FireFoxにOWAP ZAPで生成した証明書をインストールする
-<手順は後日記述する>
+
+### Burp Suite Commyunity Editionのダウンロードとインストール
+- Firefoxを起動し以下のURLを開き、インストールプログラムをダウンロードする。
+    - https://portswigger.net/burp/communitydownload
+    - Firefoxでリンク「Go straight to downloads」をクリック
+    - 遷移したページで以下を選択し「Download」ボタンをクリック
+        - Burp Suite Commyunity Edition
+        - Linux(64-Bit)
+- 仮想デスクトップ上でターミナルを起動し以下コマンドを実行
+    - sudo chmod +x /home/vagrant/Downloads/burpsuite_community_linux_v*.sh
+    - sudo /home/vagrant/Downloads/burpsuite_community_linux_v*.sh
+    - 「Yes」もしくは「Enter」を連打する
+- スタートメニューから以下操作を実施して初期設定
+    - 「その他」内「Burp Suite Community Edition」をクリックする。初期設定画面が表示される。
+    - ライセンス画面右下「I Accept」ボタンをクリックする。プロジェクト設定が画面が表示される。
+    - 設定を変更せず画面の右下「Next」ボタンをクリックする。設定ファイルの選択画面が表示される。
+    - 画面の右下「StartBurp」ボタンをクリックする。初期設定が行われBurp Suiteのダッシュボードが表示される。
+- プロキシ設定を実施
+    - ダッシュボードのメニューバー上から二列目「Proxy」をクリックする。メニューバー上から三列目にプロキシに関連するメニューが表示される。
+    - ダッシュボードのメニューバー上から三列目「Options」をクリックする。詳細設定が表示される。
+    - 以下のように設定を書き換える。
+        - 変更前：127.0.0.1:8080
+        - 変更後：127.0.0.1:18080
+
+
+### Firefoxの設定変更(手作業)
+#### OWASP ZAPの証明書をインポート
+FireFoxにOWAP ZAPで生成した証明書をインポートする
+
+- OWASP ZAPで証明書を生成
+    - 「その他」内「OWASP ZAP」をクリックする。OWASP ZAPが起動する。
+    - 画面上側メニューバー「ツール」内「オプション」をクリックする。オプション画面が表示される。
+    - 画面右側のリストより「ダイナミックSSL証明書」をクリックする。画面右側にSSL証明書の生成画面が表示される。
+    - 「生成」ボタンをクリックする。画面右下「保存」ボタンをクリックする。証明書データが出力される。以下要領で保存する。
+        - ファイル名：owasp_zap_root_ca.cer
+        - 保存先：Desktop等わかりやすい場所を選択
+
+- Firefoxに証明書をインポート
+    - Firefoxを起動する。
+    - 画面右上「メニュー」ボタン内「設定」をクリックする。設定画面が表示される。
+    - 画面左側「プライバシーとセキュリティ」をクリックする。画面右側にブラウザープライバシーの設定画面が表示される。
+    - 画面下側にスクロールし「証明書」欄の「証明書を表示」ボタンをクリックする。「証明書マネージャー」が表示される。
+    - 「認証局証明書」をクリックする。認証局証明書の設定画面が表示される。
+    - 「インポート」ボタンをクリックする。ファイル選択画面が表示される。
+    - OWASP ZAPで生成したファイル「owasp_zap_root_ca.cer」を選択しインポートする。
+
+※OWASP ZAPで生成した証明書情報は有効期限が当日のみに設定されている。必要に応じて上記手順を再度実施し更新する。
 
 #### FoxyProxyの設定
 - アドオンFoxy ProxyをFireFoxにインストール 
@@ -219,8 +196,15 @@ sudo chmod +x /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
     - https://addons.mozilla.org/ja/firefox/addon/foxyproxy-standard/
     - アドオンをダウンロードしFirefoxにインストールする
 - FoxyProxyの設定
-    - 
-<手順は後日記述する>
+    - 以下を設定する。
+    - OWASP ZAPの設定
+        - 設定タイトル：OWASP ZAP:8080
+        - Proxy IP address or DNS name：localhost
+        - Port：8080
+    - Burp Suite Commyunity Editionの設定
+        - 設定タイトル：Burp Suite:18080
+        - Proxy IP address or DNS name：localhost
+        - Port：18080
 
 #### その他アドオンのインストール
 - Lununtu上でFireFoxを起動し、以下URLにアクセス。アドオン User-Agent Switcherをインストールする。
@@ -229,3 +213,13 @@ sudo chmod +x /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
 - Lununtu上でFireFoxを起動し、以下URLにアクセス。アドオン Wappalyzerをインストールする。
     - https://addons.mozilla.org/ja/firefox/addon/wappalyzer/
     - 設定は特になし
+
+### 参考ページ
+- 【Ubuntu 20.04 LTS Server】phpMyAdminをインストール   
+    - https://www.yokoweb.net/2020/08/16/ubuntu-20_04-phpmyadmin-install/
+- OWASP ZAP ルート証明書を更新する
+    - https://techtech-note.com/636/
+- OWASP ZAPで脆弱性診断 設定編
+    - https://techtech-note.com/610/
+- https://ja.linux-console.net/?p=963
+    - https://ja.linux-console.net/?p=963
