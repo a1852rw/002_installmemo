@@ -5,10 +5,13 @@
 - ゲストOS： Lubuntu 20.04 (bento/ubuntu-20.04)
 https://app.vagrantup.com/bento/boxes/ubuntu-20.04
 - Vagrantプラグイン：vagrant-vbguest
-- ツール1：Apache 2.4.41
-- ツール2：PHP 7.4.3
-- ツール3：EC-Cube 4.1.0
+- ツール1：Apache v2.4.41
+- ツール2：PHP v7.4.3
+- ツール3：EC-Cube v4.1.0
 - ツール4：OWASP ZAP v2.11.1
+- ツール5：Maria DB v15.1
+- ツール6：JAVA v11.14
+- ツール7：Burp Suite Community Edition v2022.2.4
 
 ## 環境構築演習
 上記環境を構築する。  
