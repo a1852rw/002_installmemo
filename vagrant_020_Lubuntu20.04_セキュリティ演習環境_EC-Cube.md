@@ -21,8 +21,9 @@ https://app.vagrantup.com/bento/boxes/ubuntu-20.04
 「システムツール」内「QTerminal」をクリックする。ターミナルが起動する。
 
 ### Apache/PHPのインストールと設定
--ApacheはPHPインストール時に自動的にインストールされる
+ApacheはPHPインストール時に自動的にインストールされる
 
+    - sudo apt-get update -y
     - sudo apt-get install -y php
     - sudo apt-get install -y libonig-dev libxml2-dev
     - sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-intl php-zip php-phar php-ctype php-curl php-fileinfo php-opcache php-pdo php-fpm php-json php-cli php-common php-mysql
