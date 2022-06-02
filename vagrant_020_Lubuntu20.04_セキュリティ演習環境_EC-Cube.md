@@ -18,57 +18,85 @@ https://app.vagrantup.com/bento/boxes/ubuntu-20.04
 仮想デスクトップを起動しターミナルから以下操作を順に実施する。
 
 ### ターミナルの起動
-- 「システムツール」内「QTerminal」をクリックする。ターミナルが起動する。
+「システムツール」内「QTerminal」をクリックする。ターミナルが起動する。
 
 ### Apache/PHPのインストールと設定
-- ApacheはPHPインストール時に自動的にインストールされる
-- sudo apt-get update -y
-- sudo apt-get install -y php
-- sudo apt-get install -y libonig-dev libxml2-dev
-- sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-intl php-zip php-phar php-ctype php-curl php-fileinfo php-opcache php-pdo php-fpm php-json php-cli php-common php-mysql
-- PHP/Apacheのインストールを確認。バージョン情報が表示されれば成功。
+ApacheはPHPインストール時に自動的にインストールされる
+
+    - sudo apt-get update -y
+    - sudo apt-get install -y php
+    - sudo apt-get install -y libonig-dev libxml2-dev
+    - sudo apt-get install -y php-mbstring php-xml php-xmlrpc php-gd php-pdo php-mysqlnd php-json php-pgsql php-intl php-zip php-phar php-ctype php-curl php-fileinfo php-opcache php-pdo php-fpm php-json php-cli php-common php-mysql
+
+PHP/Apacheのインストールを確認。バージョン情報が表示されれば成功。
+
     - php -v
     - apache2 -v
-- Apache2の自動起動を設定
+
+Apache2の自動起動を設定
+
     - sudo systemctl restart apache2
     - sudo systemctl enable apache2
+
 - 仮想デスクトップ内でブラウザ(インストール済みのFirefox)を開き動作確認
     - http://localhost
     - Apacheが表示されれば成功
 
 ### PHP/Apaceh初期設定
-- sudo touch /var/www/html/info.php
-- sudo chmod 766 /var/www/html/info.php
-- sudo echo '<?php phpinfo(); ?>' > /var/www/html/info.php
-- sudo systemctl restart apache2
+
+    - sudo touch /var/www/html/info.php
+    - sudo chmod 766 /var/www/html/info.php
+    - sudo echo '<?php phpinfo(); ?>' > /var/www/html/info.php
+    - sudo systemctl restart apache2
+
 - 仮想デスクトップ内でFirefoxを起動し動作確認
     - http://127.0.0.1/info.php
     - PHPの情報ページが表示されれば成功
 
 ### MariaDBの設定
-- sudo apt-get install -y mariadb-server
-- sudo systemctl enable mariadb
-- sudo systemctl start mariadb
-- sudo mysql -uroot -p
+
+    - sudo apt-get install -y mariadb-server
+    - sudo systemctl enable mariadb
+    - sudo systemctl start mariadb
+    - sudo mysql -uroot -p
     - password:vagrant
-    - MariaDB> create user ecuser identified by 'ec-cube';
-    - MariaDB> create database ecdata;
-    - MariaDB> grant all privileges on ecdata.* TO 'ecuser';
-    - MariaDB> flush privileges;
-    - MariaDB> exit;
-- mysql -u ecuser -p
+    ※1 パスワード文字列「vagrant」をキーボードから直接入力する。
+    ※2 Linuxでは入力したパスワードが画面上に表示されない。
+    キーボードから打ち込んだのち、そのまま「Enter」キーを入力し次の手順に進む。
+
+以降はMariaDBにログインした状態での操作となる。  
+そのためコマンドラインの左側にプロンプト「MariaDB> 」が表示された状態で入力する。
+
+    - create user ecuser identified by 'ec-cube';
+    - create database ecdata;
+    - grant all privileges on ecdata.* TO 'ecuser';
+    - flush privileges;
+    - exit;
+
+ここでMariaDBよりログアウトする。  
+プロンプト「MariaDB> 」が表示されなくなる。
+
+    - mysql -u ecuser -p
     - password：ec-cube
-    - MariaDB> show databases;
-    - テーブル「ecdata」が表示されれば成功
-- exit
+    ※1 パスワード文字列「vagrant」をキーボードから直接入力する。
+    ※2 Linuxでは入力したパスワードが画面上に表示されない。
+    キーボードから打ち込んだのち、そのまま「Enter」キーを入力し次の手順に進む。
+
+    再びMariaDBにログインした状態での操作となる。  
+
+    - show databases;
+    ※ テーブル「ecdata」が表示されれば成功
+    - exit
 
 ### EC-Cubeのインストール
-- sudo wget http://downloads.ec-cube.net/src/eccube-4.1.0.zip
-- sudo unzip eccube-4.1.0.zip
-- sudo chmod 775 -R /var/www/
-- sudo cp -r ~/ec-cube/. /var/www/html/
-- sudo chown -R www-data:www-data /var/www/*
-- sudo systemctl restart apache2
+
+    - sudo wget http://downloads.ec-cube.net/src/eccube-4.1.0.zip
+    - sudo unzip eccube-4.1.0.zip
+    - sudo chmod 775 -R /var/www/
+    - sudo cp -r ~/ec-cube/. /var/www/html/
+    - sudo chown -R www-data:www-data /var/www/*
+    - sudo systemctl restart apache2
+
 - ブラウザで動作確認
     - http://127.0.0.1/index.php
     - EC-CUBEのインストール画面が表示されれば成功
@@ -114,13 +142,17 @@ https://app.vagrantup.com/bento/boxes/ubuntu-20.04
 - パスワード：test_test
 
 ### PHP my adminのインストール
-- sudo apt-get install -y phpmyadmin
+
+    - sudo apt-get install -y phpmyadmin
+
 - Apacheを選択
     - 「はい」を選択
 - 「了解」を選択
     - パスワード：phpmyadmin_test
     - パスワードの確認：phpmyadmin_test
-- Apache側の設定
+
+Apache側の設定
+
     - sudo ln -s /etc/phpmyadmin/apache.conf /etc/apache2/conf-available/phpmyadmin.conf
     - sudo a2enconf phpmyadmin.conf
     - sudo systemctl restart apache2
@@ -138,13 +170,15 @@ https://app.vagrantup.com/bento/boxes/ubuntu-20.04
 
 ### OWASP ZAPによる演習環境の構築
 #### JREのダウンロードとインスト―ル
-sudo add-apt-repository -y ppa:openjdk-r/ppa && sudo apt-get update
-sudo apt-get install -y openjdk-11-jre
+
+    - sudo add-apt-repository -y ppa:openjdk-r/ppa && sudo apt-get update
+    - sudo apt-get install -y openjdk-11-jre
 
 #### OWASP ZAPのダウンロードとインスト―ル
-sudo wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2_11_1_unix.sh -P /home/vagrant/Downloads
-sudo chmod +x /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
-sudo /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
+
+    - sudo wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2_11_1_unix.sh -P /home/vagrant/Downloads
+    - sudo chmod +x /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
+    - sudo /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
 
 
 ### Burp Suite Commyunity Editionのダウンロードとインストール
@@ -154,10 +188,13 @@ sudo /home/vagrant/Downloads/ZAP_2_11_1_unix.sh
     - 遷移したページで以下を選択し「Download」ボタンをクリック
         - Burp Suite Commyunity Edition
         - Linux(64-Bit)
-- 仮想デスクトップ上でターミナルを起動し以下コマンドを実行
+
+仮想デスクトップ上でターミナルを起動し以下コマンドを実行
+
     - sudo chmod +x /home/vagrant/Downloads/burpsuite_community_linux_v*.sh
     - sudo /home/vagrant/Downloads/burpsuite_community_linux_v*.sh
     - 「Yes」もしくは「Enter」を連打する
+
 - スタートメニューから以下操作を実施して初期設定
     - 「その他」内「Burp Suite Community Edition」をクリックする。初期設定画面が表示される。
     - ライセンス画面右下「I Accept」ボタンをクリックする。プロジェクト設定が画面が表示される。
